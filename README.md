@@ -34,7 +34,7 @@ h1 {
 
 # context
 
- ![2tup](images/2_tup.png)
+ ![2tup](images/La-methode-2TUP-6.png)
 
 
 
