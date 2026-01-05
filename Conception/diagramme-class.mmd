@@ -1,0 +1,27 @@
+classDiagram
+
+class User {
+    +int id
+    +string name
+    +timestamp created_at
+    +timestamp updated_at
+}
+
+class Student {
+    +int id
+    +string name
+    +string email
+    +string image
+    +timestamp created_at
+    +timestamp updated_at
+}
+
+class Activity {
+    +int id
+    +string name
+    +timestamp created_at
+    +timestamp updated_at
+}
+
+User "1" --> "0..*" Student : owns
+Student "0..*" -- "0..*" Activity : participates

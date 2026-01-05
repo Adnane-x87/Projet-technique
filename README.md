@@ -56,3 +56,8 @@ paginate: true
 
 <img src="./images/usecas.png" alt="2tup" width="10000"/>
 
+--- 
+
+ # Diagramme de classe
+
+ <img src="./images/diagramme-class.png" alt="2tup" width="10000"/>
