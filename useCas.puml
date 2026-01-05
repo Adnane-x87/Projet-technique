@@ -9,7 +9,7 @@ package "Students List" {
     
     usecase "Gérer les étudiants (CRUD)" as UC_CRUD
     usecase "Filtrer par groupe" as UC_Filtrer
-    usecase "Rechercher des groupes" as UC_Rechercher
+    usecase "Rechercher des étudiants" as UC_Rechercher
 }
 
 ' Relations Visiteur
