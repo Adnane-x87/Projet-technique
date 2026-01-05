@@ -3,13 +3,13 @@ left to right direction
 actor "Visiteur" as Visiteur
 actor "Admin" as Admin
 
-package "Students List" {
+package "Job  skills" {
     usecase "Consulter la page d'accueil" as UC_Accueil
-    usecase "Voir les détails d'un étudiant" as UC_Details
+    usecase "Voir les détails d'un Emploi" as UC_Details
     
     usecase "Gérer les étudiants (CRUD)" as UC_CRUD
-    usecase "Filtrer par groupe" as UC_Filtrer
-    usecase "Rechercher des étudiants" as UC_Rechercher
+    usecase "Filtrer par compétences" as UC_Filtrer
+    usecase "Rechercher des Emploi" as UC_Rechercher
 }
 
 ' Relations Visiteur

@@ -3,25 +3,28 @@ classDiagram
 class User {
     +int id
     +string name
-    +timestamp created_at
-    +timestamp updated_at
-}
-
-class Student {
-    +int id
-    +string name
     +string email
-    +string image
+    +string password
     +timestamp created_at
     +timestamp updated_at
 }
 
-class Activity {
+class Job {
+    +int id
+    +string title
+    +string description
+    +string company
+    +image string
+    +timestamp created_at
+    +timestamp updated_at
+}
+
+class Skill {
     +int id
     +string name
     +timestamp created_at
     +timestamp updated_at
 }
 
-User "1" --> "0..*" Student : owns
-Student "0..*" -- "0..*" Activity : participates
+User "1" --> "0..*" Job : posts
+Job "0..*" -- "0..*" Skill : requires

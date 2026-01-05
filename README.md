@@ -20,6 +20,8 @@ paginate: true
 
 # Choix du Sujet
 
+
+- job_skill
 ## Students List
 
 ---
@@ -60,4 +62,4 @@ paginate: true
 
  # Diagramme de classe
 
- <img src="./images/diagramme-class.png" alt="2tup" width="10000"/>
+ <img src="./images/diagramme-class.png" alt="2tup" width="150"/>
