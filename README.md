@@ -28,13 +28,14 @@ h1 {
 
 # Choix du sujet
 
-- Students list
+## Students list
 
 ---
 
 # context
 
- ![2tup](images/La-methode-2TUP-6.png)
+ <img src="images/La-methode-2TUP-6.png" alt="2tup" width="700"/>
+
 
 
 
