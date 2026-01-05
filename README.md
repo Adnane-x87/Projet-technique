@@ -51,3 +51,8 @@ paginate: true
 
 ---
 
+# Analyse Fonctionnelle
+
+
+<img src="./images/usecas.png" alt="2tup" width="10000"/>
+
