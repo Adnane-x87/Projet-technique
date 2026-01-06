@@ -69,5 +69,5 @@ paginate: true
 
 # Sujet - Live coding
 
-- Un bouton “Ajouter” qui ouvre une modale pour créer un nouvel élément.
-- Une barre de recherche filtrant des éléments par titre.
+- Un bouton « Ajouter » qui ouvre une modale pour créer un nouvel emploi.
+- Une barre de recherche filtrant des Emploi par compétences.
