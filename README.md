@@ -13,8 +13,17 @@ paginate: true
 
 # Présentation Projet Technique
 
+### Job skills
 - Présentée par : Adnane Kesksu
 - Encadré par : M. Essarraj Fouad 
+
+
+
+---
+#  La méthode Waterfall (En cascade)
+
+<img src='./images/Waterfall.webp' width='1000'>
+
 
 ---
 
@@ -22,7 +31,6 @@ paginate: true
 
 
 - job_skill
-## Students List
 
 ---
 
@@ -31,8 +39,10 @@ paginate: true
 <img src="images/La-methode-2TUP-6.png" alt="2tup" width="700"/>
 
 --- 
+# Exigences: Analyse Technique
 
-# Technologies Utilisées
+
+## Technologies Utilisées
 
 - 1- Base de données : MySQL
 - 2- Framework : Laravel
@@ -42,7 +52,7 @@ paginate: true
 
 ---
 
-# Technologies Utilisées (suite)
+## Technologies Utilisées (suite)
 
 - 6- AJAX : Actions dynamiques
 - 7- Upload d'images
@@ -53,7 +63,7 @@ paginate: true
 
 ---
 
-# Analyse Fonctionnelle
+# Analyse : Analyse Fonctionnelle
 
 
 <img src="./images/usecas.png" alt="2tup" width="10000"/>
