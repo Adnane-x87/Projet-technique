@@ -1,0 +1,9 @@
+title,description,company,image,user_id
+Backend Developer,"We are looking for an experienced backend developer to join our team. You will work on building scalable APIs and managing databases.",TechCorp,backend.jpg,1
+Frontend Developer,"Join our frontend team to create beautiful and responsive user interfaces. Experience with modern frameworks required.",WebSolutions,frontend.jpg,1
+Full Stack Developer,"Work on exciting full-stack projects from database to UI. Must be comfortable with both backend and frontend technologies.",StartupHub,fullstack.jpg,1
+DevOps Engineer,"Help us build and maintain our infrastructure. Experience with Docker and CI/CD pipelines essential.",CloudTech,devops.jpg,1
+Mobile Developer,"Build cross-platform mobile applications. Knowledge of React Native or Flutter preferred.",AppStudio,mobile.jpg,1
+Data Scientist,"Analyze large datasets and build machine learning models. Python and SQL experience required.",DataCorp,datascience.jpg,1
+UI/UX Designer,"Design intuitive user interfaces and create engaging user experiences. Portfolio required.",DesignHub,uiux.jpg,1
+Product Manager,"Lead product development from conception to launch. Technical background preferred.",ProductCo,pm.jpg,1
