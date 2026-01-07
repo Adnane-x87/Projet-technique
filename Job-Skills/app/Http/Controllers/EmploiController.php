@@ -45,9 +45,31 @@ class EmploiController extends Controller
     /**
      * Display admin dashboard.
      */
-    public function manage()
+    public function manage(Request $request)
     {
-        $emplois = Emploi::with('skills')->latest()->get();
+        $query = Emploi::with('skills')->latest();
+
+        // Text search
+        if ($request->filled('search')) {
+            $search = $request->get('search');
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('company', 'like', "%{$search}%")
+                  ->orWhereHas('skills', function($sq) use ($search) {
+                      $sq->where('name', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        // Filter by skill
+        if ($request->filled('skill')) {
+            $skillId = $request->get('skill');
+            $query->whereHas('skills', function($q) use ($skillId) {
+                $q->where('skills.id', $skillId);
+            });
+        }
+
+        $emplois = $query->get();
         $skills = Skills::all();
         return view('admin.dashboard', compact('emplois', 'skills'));
     }
@@ -71,16 +93,26 @@ class EmploiController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'company' => 'required|string|max:255',
-            'image' => 'nullable|url', // Assuming simple URL or string for now
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'skills' => 'array|exists:skills,id'
         ]);
 
-        $validated['user_id'] = Auth::id(); // Assign to current user
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('emplois', 'public');
+        }
+
+        // Assign current user or fallback to admin (ID 1)
+        $validated['user_id'] = Auth::id() ?? 1;
 
         $emploi = Emploi::create($validated);
 
         if ($request->has('skills')) {
             $emploi->skills()->attach($request->skills);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Job created successfully.', 'emploi' => $emploi], 201);
         }
 
         return redirect()->route('emplois.index')->with('success', 'Job created successfully.');
@@ -113,14 +145,27 @@ class EmploiController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'company' => 'required|string|max:255',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'skills' => 'array|exists:skills,id'
         ]);
+
+        // Handle image upload
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($emploi->image) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($emploi->image);
+            }
+            $validated['image'] = $request->file('image')->store('emplois', 'public');
+        }
 
         $emploi->update($validated);
 
         if ($request->has('skills')) {
             $emploi->skills()->sync($request->skills);
+        }
+
+        if ($request->wantsJson()) {
+            return response()->json(['message' => 'Job updated successfully.', 'emploi' => $emploi], 200);
         }
 
         return redirect()->route('emplois.index')->with('success', 'Job updated successfully.');
@@ -165,8 +210,10 @@ class EmploiController extends Controller
                 'id' => $emploi->id,
                 'title' => $emploi->title,
                 'company' => $emploi->company,
+                'description' => $emploi->description,
                 'image' => $emploi->image,
                 'skills' => $emploi->skills->map(fn($s) => ['id' => $s->id, 'name' => $s->name]),
+                'date' => $emploi->created_at->format('d/m/Y'),
                 'url' => route('emplois.show', $emploi)
             ];
         });
