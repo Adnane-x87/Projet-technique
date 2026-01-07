@@ -15,6 +15,6 @@ class Emploi extends Model
 
     function skills(){
 
-        return $this->belongsToMany(Skills::class);
+        return $this->belongsToMany(Skills::class, 'emploi_skill', 'emploi_id', 'skill_id');
     }
 }
