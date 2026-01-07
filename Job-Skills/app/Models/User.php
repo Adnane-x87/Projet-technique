@@ -47,7 +47,7 @@ class User extends Authenticatable
     }
 
 
-    function Emplio(){
+    function Emplois(){
       return $this->hasMany(Emploi::class);
     }
 }

@@ -9,8 +9,8 @@ class Skills extends Model
     
     protected $fillable = ['name'];
 
-    function Emploi (){
+    function emplois (){
 
-        return $this->belongsToMany(Emploi::class);
+        return $this->belongsToMany(Emploi::class, 'emploi_skill', 'skill_id', 'emploi_id');
     }
 }

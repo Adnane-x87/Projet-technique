@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Emploi extends Model
 {
-    protected $fillable = ['tille' , 'company','image', 'description' , 'user_id'];
+    protected $fillable = ['title' , 'company','image', 'description' , 'user_id'];
 
 
     function user(){
-        return $this->belongsTO(User::class);
+        return $this->belongsTo(User::class);
     }
 
     function skills(){
 
-        return $this->belongsToMany(Skills::class);
+        return $this->belongsToMany(Skills::class, 'emploi_skill', 'emploi_id', 'skill_id');
     }
 }

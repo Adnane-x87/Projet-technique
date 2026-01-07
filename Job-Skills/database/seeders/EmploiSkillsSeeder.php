@@ -15,19 +15,17 @@ class EmploiSkillsSeeder extends Seeder
      */
     public function run(): void
     {
-        $file = fopen(database_path('data/EmploiSkills.csv'), 'r');
+        $emplois = \App\Models\Emploi::all();
+        $skills = \App\Models\Skills::all();
 
-        fgetcsv($file);
-
-        while(($row = fgetcsv($file)) !== false){
-            DB::table('Emploi_skills')->insert([
-              'Emploi_id' => $row[0],
-              'skills_id' =>$row[1],
-              'created_at' => now(),
-              'update_at' => now()
-            ]);
+        if ($emplois->isEmpty() || $skills->isEmpty()) {
+            return;
         }
 
-        fclose($file);
+        foreach ($emplois as $emploi) {
+            // Attach 1 to 3 random skills to each job
+            $randomSkills = $skills->random(rand(1, min(3, $skills->count())));
+            $emploi->skills()->sync($randomSkills);
+        }
     }
 }
