@@ -1,116 +1,361 @@
 <x-layouts.app>
-    <div class="max-w-7xl mx-auto px-6 py-12">
-        <!-- Dashboard Header -->
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-            <div>
-                <h1 class="text-3xl font-extrabold tracking-tight text-slate-900 mb-2">Tableau de bord</h1>
-                <p class="text-slate-500 font-medium">Gestion centralisée des opportunités et des talents.</p>
+    <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1 style="font-size: 1.75rem;">Tableau de bord</h1>
+            <button onclick="openCreateModal()" class="btn btn-primary">+ Ajouter une offre</button>
+        </div>
+
+        <!-- Stats -->
+        <div
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 30px;">
+            <div class="card" style="text-align: center;">
+                <p style="color: #666; font-size: 12px; text-transform: uppercase;">Total Offres</p>
+                <p style="font-size: 2rem; font-weight: bold;">{{ $emplois->count() }}</p>
             </div>
-            
-            <div class="flex items-center gap-4">
-                <button type="button" onclick="openCreateModal()" class="btn-modern btn-modern-primary group">
-                    <svg class="w-5 h-5 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/>
-                    </svg>
-                    Ajouter une offre
-                </button>
+            <div class="card" style="text-align: center;">
+                <p style="color: #666; font-size: 12px; text-transform: uppercase;">Compétences</p>
+                <p style="font-size: 2rem; font-weight: bold;">{{ $skills->count() }}</p>
             </div>
         </div>
 
-        <!-- Stats Grid (Simple) -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Offres</p>
-                <p class="text-3xl font-extrabold text-slate-900">{{ $emplois->count() }}</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Compétences</p>
-                <p class="text-3xl font-extrabold text-slate-900">{{ $skills->count() }}</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Vues Totales</p>
-                <p class="text-3xl font-extrabold text-slate-900">1.2k</p>
+        <!-- Search & Filter (AJAX) -->
+        <div class="card" style="margin-bottom: 30px;">
+            <div style="display: flex; gap: 15px; align-items: center; width: 100%;">
+                <input type="text" id="search-input" placeholder="Rechercher par titre, entreprise..."
+                    style="padding: 12px 16px; border: 1px solid #ddd; border-radius: 6px; flex: 1; min-width: 545px; font-size: 16px;">
+
+                <select id="skill-filter"
+                    style="padding: 12px 16px; border: 1px solid #ddd; border-radius: 6px; min-width: 200px; font-size: 16px;">
+                    <option value="">Toutes les compétences</option>
+                    @foreach ($skills as $skill)
+                        <option value="{{ $skill->id }}">
+                            {{ $skill->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                <button type="button" onclick="resetFilters()" class="btn"
+                    style="padding: 12px 20px; font-size: 16px;">Réinitialiser</button>
             </div>
         </div>
 
-        <!-- Table Container -->
-        <div class="bg-white rounded-[2rem] shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-slate-100">
-                    <thead class="bg-slate-50/50">
-                        <tr>
-                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Offre & Entreprise</th>
-                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Compétences</th>
-                            <th class="px-8 py-5 text-left text-xs font-bold text-slate-400 uppercase tracking-widest">Date</th>
-                            <th class="px-8 py-5 text-right text-xs font-bold text-slate-400 uppercase tracking-widest">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-50">
-                        @forelse($emplois as $emploi)
-                        <tr class="hover:bg-slate-50/30 transition-colors group">
-                            <td class="px-8 py-6 whitespace-nowrap">
-                                <div class="flex items-center gap-4">
-                                    <div class="w-12 h-12 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center overflow-hidden">
-                                        @if($emploi->image)
-                                            <img src="{{ $emploi->image }}" class="w-full h-full object-cover">
-                                        @else
-                                            <span class="text-lg font-bold text-slate-300">{{ substr($emploi->company, 0, 1) }}</span>
-                                        @endif
-                                    </div>
-                                    <div>
-                                        <p class="text-sm font-bold text-slate-900">{{ $emploi->title }}</p>
-                                        <p class="text-xs text-slate-500 font-medium">{{ $emploi->company }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-8 py-6">
-                                <div class="flex flex-wrap gap-1.5">
-                                    @foreach($emploi->skills->take(2) as $skill)
-                                        <span class="px-2.5 py-1 bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-wider rounded-md border border-slate-200/50">
-                                            {{ $skill->name }}
-                                        </span>
-                                    @endforeach
-                                    @if($emploi->skills->count() > 2)
-                                        <span class="px-2 py-1 text-[10px] font-bold text-slate-400">+{{ $emploi->skills->count() - 2 }}</span>
+        <!-- Job List -->
+        <div class="card">
+            <h2 style="font-size: 1.25rem; margin-bottom: 15px;">Offres d'emploi</h2>
+
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 2px solid #ddd; text-align: left;">
+                        <th style="padding: 10px 0;">Titre</th>
+                        <th style="padding: 10px 0;">Entreprise</th>
+                        <th style="padding: 10px 0;">Compétences</th>
+                        <th style="padding: 10px 0;">Date</th>
+                        <th style="padding: 10px 0; text-align: right;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="jobs-table-body">
+                    @forelse($emplois as $emploi)
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 12px 0;">{{ $emploi->title }}</td>
+                            <td style="padding: 12px 0;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    @if ($emploi->image)
+                                        <img src="{{ asset('storage/' . $emploi->image) }}"
+                                            style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
                                     @endif
+                                    {{ $emploi->company }}
                                 </div>
                             </td>
-                            <td class="px-8 py-6 whitespace-nowrap">
-                                <span class="text-xs font-semibold text-slate-500">{{ $emploi->created_at->format('d M, Y') }}</span>
+                            <td style="padding: 12px 0;">
+                                @foreach ($emploi->skills->take(2) as $skill)
+                                    <span
+                                        style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-right: 3px;">{{ $skill->name }}</span>
+                                @endforeach
+                                @if ($emploi->skills->count() > 2)
+                                    <span
+                                        style="color: #999; font-size: 11px;">+{{ $emploi->skills->count() - 2 }}</span>
+                                @endif
                             </td>
-                            <td class="px-8 py-6 whitespace-nowrap text-right">
-                                <div class="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <button type="button" 
-                                        onclick="openEditModal({{ $emploi->id }}, '{{ addslashes($emploi->title) }}', '{{ addslashes($emploi->company) }}', '{{ addslashes($emploi->description) }}', '{{ $emploi->image }}', {{ json_encode($emploi->skills->pluck('id')) }})"
-                                        class="p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </button>
-                                    <form action="{{ route('emplois.destroy', $emploi) }}" method="POST" class="inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all" onclick="return confirm('Êtes-vous sûr ?')">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
+                            <td style="padding: 12px 0; color: #666; font-size: 13px;">
+                                {{ $emploi->created_at->format('d/m/Y') }}</td>
+                            <td style="padding: 12px 0; text-align: right;">
+                                <button
+                                    onclick='openEditModal({{ $emploi->id }}, {{ json_encode($emploi->title) }}, {{ json_encode($emploi->company) }}, {{ json_encode($emploi->description) }}, {{ json_encode($emploi->skills->pluck('id')) }})'
+                                    class="btn" style="padding: 4px 10px; font-size: 12px;">Modifier</button>
+
+                                <form action="{{ route('emplois.destroy', $emploi) }}" method="POST"
+                                    style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger"
+                                        style="padding: 4px 10px; font-size: 12px;"
+                                        onclick="return confirm('Supprimer cette offre ?')">Supprimer</button>
+                                </form>
                             </td>
                         </tr>
-                        @empty
+                    @empty
                         <tr>
-                            <td colspan="4" class="px-8 py-20 text-center">
-                                <p class="text-slate-400 font-medium">Aucune offre d'emploi n'a été trouvée.</p>
-                            </td>
+                            <td colspan="5" style="padding: 30px; text-align: center; color: #666;">Aucune offre
+                                trouvée.</td>
                         </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
-    
-    <x-job-modal :skills="$skills" />
+
+    <!-- Modal -->
+    <div id="jobModal"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="card"
+            style="width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 id="modalTitle" style="font-size: 1.5rem; margin: 0;">Ajouter une offre</h2>
+                <button onclick="closeModal()"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+
+            <form id="jobForm" onsubmit="handleFormSubmit(event)">
+                @csrf
+                <input type="hidden" id="method" name="_method" value="POST">
+
+                <div style="margin-bottom: 15px;">
+                    <label for="title" style="display: block; margin-bottom: 5px; font-weight: 500;">Titre du
+                        poste</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="company"
+                        style="display: block; margin-bottom: 5px; font-weight: 500;">Entreprise</label>
+                    <input type="text" id="company" name="company" required>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="description"
+                        style="display: block; margin-bottom: 5px; font-weight: 500;">Description</label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    <label for="image" style="display: block; margin-bottom: 5px; font-weight: 500;">Image
+                        (optionnel)</label>
+                    <input type="file" id="image" name="image" accept="image/*" style="padding: 5px;">
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 10px; font-weight: 500;">Compétences</label>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        @foreach ($skills as $skill)
+                            <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                <input type="checkbox" name="skills[]" value="{{ $skill->id }}"
+                                    id="skill_{{ $skill->id }}" style="width: auto;">
+                                {{ $skill->name }}
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                    <button type="button" onclick="closeModal()" class="btn">Annuler</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentJobId = null;
+        let debounceTimer;
+
+        const searchInput = document.getElementById('search-input');
+        const skillFilter = document.getElementById('skill-filter');
+        const jobsTableBody = document.getElementById('jobs-table-body');
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        // Search Logic
+        function resetFilters() {
+            searchInput.value = '';
+            skillFilter.value = '';
+            fetchJobs();
+        }
+
+        function fetchJobs() {
+            const search = searchInput.value;
+            const skill = skillFilter.value;
+
+            const params = new URLSearchParams();
+            if (search) params.append('search', search);
+            if (skill) params.append('skill', skill);
+
+            fetch('/api/emplois?' + params.toString())
+                .then(res => res.json())
+                .then(data => {
+                    renderJobs(data.emplois);
+                })
+                .catch(err => console.error(err));
+        }
+
+        searchInput.addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(fetchJobs, 300);
+        });
+
+        skillFilter.addEventListener('change', fetchJobs);
+
+        function renderJobs(emplois) {
+            if (emplois.length === 0) {
+                jobsTableBody.innerHTML =
+                    `<tr><td colspan="5" style="padding: 30px; text-align: center; color: #666;">Aucune offre trouvée.</td></tr>`;
+                return;
+            }
+
+            jobsTableBody.innerHTML = emplois.map(job => {
+                const skillsHtml = job.skills.slice(0, 2).map(s =>
+                    `<span style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-right: 3px;">${s.name}</span>`
+                ).join('');
+
+                const extraSkills = job.skills.length > 2 ?
+                    `<span style="color: #999; font-size: 11px;">+${job.skills.length - 2}</span>` : '';
+
+                const imageHtml = job.image ?
+                    `<img src="/storage/${job.image}" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">` :
+                    '';
+
+                // Escape strings using a simpler approach safer for template literals
+                const safeTitle = job.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeCompany = job.company.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+                const safeDesc = job.description.replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, '\\n');
+                const skillsJson = JSON.stringify(job.skills.map(s => s.id));
+
+                return `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 12px 0;">${job.title}</td>
+                        <td style="padding: 12px 0;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                ${imageHtml}
+                                ${job.company}
+                            </div>
+                        </td>
+                        <td style="padding: 12px 0;">
+                            ${skillsHtml}
+                            ${extraSkills}
+                        </td>
+                        <td style="padding: 12px 0; color: #666; font-size: 13px;">
+                            ${job.date}
+                        </td>
+                        <td style="padding: 12px 0; text-align: right;">
+                            <button onclick='openEditModal(${job.id}, "${safeTitle}", "${safeCompany}", "${safeDesc}", ${skillsJson})'
+                                class="btn" style="padding: 4px 10px; font-size: 12px;">Modifier</button>
+                            
+                            <button onclick="deleteJob(${job.id})" class="btn btn-danger"
+                                style="padding: 4px 10px; font-size: 12px;">Supprimer</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Action Logic
+        async function deleteJob(id) {
+            if (!confirm('Supprimer cette offre ?')) return;
+
+            try {
+                const response = await fetch(`/emplois/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Refresh the list while keeping filters
+                    fetchJobs();
+                } else {
+                    alert('Erreur lors de la suppression');
+                }
+            } catch (e) {
+                console.error(e);
+                alert('Erreur de connexion');
+            }
+        }
+
+        // Modal Logic
+        function openCreateModal() {
+            currentJobId = null;
+            document.getElementById('modalTitle').textContent = 'Ajouter une offre';
+            document.getElementById('method').value = 'POST';
+            document.getElementById('jobForm').reset();
+            document.querySelectorAll('input[name="skills[]"]').forEach(cb => cb.checked = false);
+            document.getElementById('jobModal').style.display = 'flex';
+        }
+
+        function openEditModal(id, title, company, description, skillIds) {
+            currentJobId = id;
+            document.getElementById('modalTitle').textContent = 'Modifier l\'offre';
+            document.getElementById('method').value = 'PUT';
+
+            document.getElementById('title').value = title;
+            document.getElementById('company').value = company;
+            document.getElementById('description').value = description;
+
+            document.querySelectorAll('input[name="skills[]"]').forEach(cb => {
+                cb.checked = skillIds.includes(parseInt(cb.value));
+            });
+
+            document.getElementById('jobModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('jobModal').style.display = 'none';
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = 'Enregistrement...';
+            submitBtn.disabled = true;
+
+            const formData = new FormData(e.target);
+
+            const url = currentJobId ?
+                `/emplois/${currentJobId}` :
+                '{{ route('emplois.store') }}';
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    closeModal();
+                    fetchJobs(); // Refresh via Ajax
+                } else {
+                    const data = await response.json();
+                    alert(data.message || 'Une erreur est survenue');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Erreur de connexion');
+            } finally {
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        document.getElementById('jobModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('jobModal')) {
+                closeModal();
+            }
+        });
+    </script>
 </x-layouts.app>
