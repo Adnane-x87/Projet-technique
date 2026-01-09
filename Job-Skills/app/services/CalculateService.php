@@ -9,3 +9,4 @@ class CalculateService
         return $a + $b;
     }
 }
+
