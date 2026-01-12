@@ -4,11 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Emploi;
 use App\Models\Skills;
+use App\Services\SkillsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EmploiController extends Controller
 {
+    protected $skillsService;
+
+    public function __construct(SkillsService $skillsService)
+    {
+        $this->skillsService = $skillsService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -37,7 +44,7 @@ class EmploiController extends Controller
         }
 
         $emplois = $query->paginate(5);
-        $skills = Skills::orderBy('name')->get();
+        $skills = $this->skillsService->getAllSkills();
         
         return view('emplois.index', compact('emplois', 'skills'));
     }
@@ -70,7 +77,7 @@ class EmploiController extends Controller
         }
 
         $emplois = $query->paginate(5);
-        $skills = Skills::all();
+        $skills = $this->skillsService->getAllSkills();
         return view('admin.dashboard', compact('emplois', 'skills'));
     }
 
@@ -80,7 +87,7 @@ class EmploiController extends Controller
      */
     public function create()
     {
-        $skills = Skills::all();
+        $skills = $this->skillsService->getAllSkills();
         return view('emplois.create', compact('skills'));
     }
 
@@ -132,7 +139,7 @@ class EmploiController extends Controller
     public function edit(Emploi $emploi)
     {
         // Add authorization check here if needed
-        $skills = Skills::all();
+        $skills = $this->skillsService->getAllSkills();
         return view('emplois.edit', compact('emploi', 'skills'));
     }
 
