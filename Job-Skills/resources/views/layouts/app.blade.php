@@ -173,7 +173,7 @@
 
     <!-- Main Content -->
     <main class="container" style="padding: 30px 20px;">
-        {{ $slot }}
+        @yield('content')
     </main>
 
     <!-- Footer -->

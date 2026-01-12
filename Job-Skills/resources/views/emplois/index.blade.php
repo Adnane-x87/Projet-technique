@@ -1,4 +1,6 @@
-<x-layouts.app>
+@extends('layouts.app')
+
+@section('content')
     <!-- Search Section -->
     <div style="margin-bottom: 30px;">
         <h1 style="font-size: 2rem; margin-bottom: 10px;">Offres d'emploi</h1>
@@ -149,4 +151,4 @@
             display: none !important;
         }
     </style>
-</x-layouts.app>
+@endsection

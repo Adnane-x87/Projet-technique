@@ -1,4 +1,6 @@
-<x-layouts.app>
+@extends('layouts.app')
+
+@section('content')
     <div style="max-width: 1200px; margin: 0 auto; padding: 20px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <h1 style="font-size: 1.75rem;">Tableau de bord</h1>
@@ -358,4 +360,4 @@
             }
         });
     </script>
-</x-layouts.app>
+@endsection

@@ -1,4 +1,6 @@
-<x-layouts.app>
+@extends('layouts.app')
+
+@section('content')
     <!-- Breadcrumb -->
     <p style="margin-bottom: 20px;">
         <a href="{{ route('emplois.index') }}">← Retour aux offres</a>
@@ -36,4 +38,4 @@
 
 
     </div>
-</x-layouts.app>
+@endsection
