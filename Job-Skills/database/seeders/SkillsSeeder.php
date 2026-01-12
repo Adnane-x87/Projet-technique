@@ -13,9 +13,9 @@ class SkillsSeeder extends Seeder
     public function run(): void
     {
         if (($handle = fopen(database_path('data/Skills.csv'), 'r')) !== false) {
-            $header = fgetcsv($handle); // Reads column names: ['id', 'name']
+            $header = fgetcsv($handle); 
             while (($row = fgetcsv($handle)) !== false) {
-                $data = array_combine($header, $row); // Maps column names to values
+                $data = array_combine($header, $row); 
                 Skills::create([
                     'name' => $data['name'],
                 ]);

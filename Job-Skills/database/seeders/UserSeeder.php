@@ -14,14 +14,14 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         if (($handle = fopen(database_path('data/User.csv'), 'r')) !== false) {
-            $header = fgetcsv($handle); // Reads column names: ['id', 'name', 'email', 'password']
+            $header = fgetcsv($handle); 
             while (($row = fgetcsv($handle)) !== false) {
-                $data = array_combine($header, $row); // Maps column names to values
+                $data = array_combine($header, $row); 
                 User::firstOrCreate(
-                    ['email' => $data['email']], // Check if user with this email already exists
+                    ['email' => $data['email']],
                     [
                         'name' => $data['name'],
-                        'password' => Hash::make($data['password']), // Securely hashes the password
+                        'password' => Hash::make($data['password']), 
                     ]
                 );
             }
