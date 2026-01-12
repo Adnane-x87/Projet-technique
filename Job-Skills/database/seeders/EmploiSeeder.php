@@ -18,8 +18,8 @@ class EmploiSeeder extends Seeder
 
         $index = 1;
         while(($row = fgetcsv($file)) !== false){
-            // Use placeholder images from picsum.photos
-            $imageUrl = 'https://picsum.photos/seed/' . urlencode($row[2]) . '/400/300';
+           
+           
             
             Emploi::create([
                 'title'=> $row[0],
