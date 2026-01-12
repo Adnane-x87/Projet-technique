@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Emploi;
+use App\Models\Skills;
+
 class EmploiSeeder extends Seeder
 {
     /**
@@ -12,25 +13,26 @@ class EmploiSeeder extends Seeder
      */
     public function run(): void
     {
-        $file = fopen(database_path('data/Emploi.csv'), 'r');
+        if (($handle = fopen(database_path('data/Emploi.csv'), 'r')) !== false) {
+            $header = fgetcsv($handle); // Reads column names: ['id', 'title', 'skills', 'description', 'company', 'image', 'user_id']
+            while (($row = fgetcsv($handle)) !== false) {
+                $data = array_combine($header, $row); // Maps column names to values
+                
+                $emploi = Emploi::create([
+                    'title' => $data['title'],
+                    'description' => $data['description'],
+                    'company' => $data['company'],
+                    'image' => $data['image'],
+                    'user_id' => $data['user_id'],
+                ]);
 
-        fgetcsv($file);
-
-        $index = 1;
-        while(($row = fgetcsv($file)) !== false){
-           
-           
-            
-            Emploi::create([
-                'title'=> $row[0],
-                'description'=> $row[1],
-                'company'=>$row[2],
-                'image'=> $imageUrl,
-                'user_id'=>$row[4]
-            ]);
-            $index++;
+                // Attach skill based on the skill name in CSV
+                $skill = Skills::where('name', trim($data['skills']))->first();
+                if ($skill) {
+                    $emploi->skills()->attach($skill->id);
+                }
+            }
+            fclose($handle);
         }
-
-        fclose($file);
     }
 }

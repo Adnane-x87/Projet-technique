@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Skills;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class SkillsSeeder extends Seeder
@@ -13,16 +12,15 @@ class SkillsSeeder extends Seeder
      */
     public function run(): void
     {
-        $file = fopen(database_path('data/Skills.csv'), 'r');
-
-        fgetcsv($file);
-
-        while(($row = fgetcsv($file)) !== false){
-            Skills::create([
-                'name'=> $row[0]
-            ]);
+        if (($handle = fopen(database_path('data/Skills.csv'), 'r')) !== false) {
+            $header = fgetcsv($handle); // Reads column names: ['id', 'name']
+            while (($row = fgetcsv($handle)) !== false) {
+                $data = array_combine($header, $row); // Maps column names to values
+                Skills::create([
+                    'name' => $data['name'],
+                ]);
+            }
+            fclose($handle);
         }
-
-        fclose($file);
     }
 }
