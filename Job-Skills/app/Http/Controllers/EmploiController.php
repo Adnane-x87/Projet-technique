@@ -36,7 +36,7 @@ class EmploiController extends Controller
             });
         }
 
-        $emplois = $query->get();
+        $emplois = $query->paginate(5);
         $skills = Skills::orderBy('name')->get();
         
         return view('emplois.index', compact('emplois', 'skills'));
@@ -69,7 +69,7 @@ class EmploiController extends Controller
             });
         }
 
-        $emplois = $query->get();
+        $emplois = $query->paginate(5);
         $skills = Skills::all();
         return view('admin.dashboard', compact('emplois', 'skills'));
     }

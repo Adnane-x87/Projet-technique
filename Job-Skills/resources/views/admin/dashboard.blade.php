@@ -103,6 +103,29 @@
                     @endforelse
                 </tbody>
             </table>
+            
+            <!-- Pagination -->
+            <div id="pagination-container" style="margin-top: 20px; display: flex; justify-content: center; gap: 5px;">
+                @if ($emplois->onFirstPage())
+                    <span class="btn" style="opacity: 0.5; cursor: not-allowed;">« Précédent</span>
+                @else
+                    <a href="{{ $emplois->previousPageUrl() }}" class="btn">« Précédent</a>
+                @endif
+
+                @foreach ($emplois->getUrlRange(1, $emplois->lastPage()) as $page => $url)
+                    @if ($page == $emplois->currentPage())
+                        <span class="btn btn-primary">{{ $page }}</span>
+                    @else
+                        <a href="{{ $url }}" class="btn">{{ $page }}</a>
+                    @endif
+                @endforeach
+
+                @if ($emplois->hasMorePages())
+                    <a href="{{ $emplois->nextPageUrl() }}" class="btn">Suivant »</a>
+                @else
+                    <span class="btn" style="opacity: 0.5; cursor: not-allowed;">Suivant »</span>
+                @endif
+            </div>
         </div>
     </div>
 
@@ -173,18 +196,26 @@
         const searchInput = document.getElementById('search-input');
         const skillFilter = document.getElementById('skill-filter');
         const jobsTableBody = document.getElementById('jobs-table-body');
+        const paginationContainer = document.getElementById('pagination-container');
         const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
         // Search Logic
         function resetFilters() {
             searchInput.value = '';
             skillFilter.value = '';
-            fetchJobs();
+            // Reload page to reset server-side pagination
+            window.location.href = window.location.pathname;
         }
 
         function fetchJobs() {
             const search = searchInput.value;
             const skill = skillFilter.value;
+
+            // If filters are cleared, reload to show standard pagination
+            if (!search && !skill) {
+                window.location.href = window.location.pathname;
+                return;
+            }
 
             const params = new URLSearchParams();
             if (search) params.append('search', search);
@@ -193,6 +224,8 @@
             fetch('/api/emplois?' + params.toString())
                 .then(res => res.json())
                 .then(data => {
+                    // Hide pagination when searching via AJAX
+                    if (paginationContainer) paginationContainer.style.display = 'none';
                     renderJobs(data.emplois);
                 })
                 .catch(err => console.error(err));

@@ -61,6 +61,29 @@
         @endforeach
     </div>
 
+    <!-- Pagination -->
+    <div id="pagination-container" style="margin-top: 30px; display: flex; justify-content: center; gap: 5px;">
+        @if ($emplois->onFirstPage())
+            <span class="btn" style="opacity: 0.5; cursor: not-allowed;">« Précédent</span>
+        @else
+            <a href="{{ $emplois->previousPageUrl() }}" class="btn">« Précédent</a>
+        @endif
+
+        @foreach ($emplois->getUrlRange(1, $emplois->lastPage()) as $page => $url)
+            @if ($page == $emplois->currentPage())
+                <span class="btn btn-primary">{{ $page }}</span>
+            @else
+                <a href="{{ $url }}" class="btn">{{ $page }}</a>
+            @endif
+        @endforeach
+
+        @if ($emplois->hasMorePages())
+            <a href="{{ $emplois->nextPageUrl() }}" class="btn">Suivant »</a>
+        @else
+            <span class="btn" style="opacity: 0.5; cursor: not-allowed;">Suivant »</span>
+        @endif
+    </div>
+
     <!-- Empty State -->
     <div class="hidden" id="empty-state" style="text-align: center; padding: 40px;">
         <h3>Aucun résultat trouvé</h3>
@@ -75,18 +98,26 @@
         const resultsCount = document.getElementById('results-count');
         const emptyState = document.getElementById('empty-state');
         const resetBtn = document.getElementById('reset-filters');
+        const paginationContainer = document.getElementById('pagination-container');
 
         let debounceTimer;
 
         function resetFilters() {
             searchInput.value = '';
             skillFilter.value = '';
-            fetchJobs();
+            // Reload page to reset server-side pagination
+            window.location.href = window.location.pathname;
         }
 
         function fetchJobs() {
             const search = searchInput.value;
             const skill = skillFilter.value;
+
+            // If filters are cleared, reload to show standard pagination
+            if (!search && !skill) {
+                window.location.href = window.location.pathname;
+                return;
+            }
 
             const params = new URLSearchParams();
             if (search) params.append('search', search);
@@ -96,6 +127,9 @@
                 .then(res => res.json())
                 .then(data => {
                     resultsCount.textContent = data.count + ' offre' + (data.count > 1 ? 's' : '');
+                    
+                    // Hide pagination when searching via AJAX
+                    if (paginationContainer) paginationContainer.style.display = 'none';
 
                     if (data.count === 0) {
                         jobsGrid.classList.add('hidden');
