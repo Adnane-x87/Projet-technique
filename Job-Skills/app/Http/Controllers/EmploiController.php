@@ -45,7 +45,6 @@ use App\Models\User;
             $data['image'] = $request->file('image')->store('emplois', 'public');
         }
 
-        // For prototype: assign to current user or first user
         $data['user_id'] = auth()->id() ?? User::first()->id;
 
         $emploi = Emploi::create($data);
@@ -80,7 +79,7 @@ use App\Models\User;
 
         return view('emplois._table_body', [
             'emplois' => $query->get(),
-            'skills' => Skills::all() // Pass skills if needed by the partial, though list only uses emplois.
+            'skills' => Skills::all() 
         ]);
     }
 }
