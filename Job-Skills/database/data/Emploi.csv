@@ -1,0 +1,7 @@
+title,description,company,image,user_id,skills
+Développeur PHP Laravel,Poste de développeur backend pour la maintenance et l'évolution d'une plateforme SaaS.,TechSolutions,backend.jpg,1,Laravel
+Frontend React Developer,Nous recherchons un expert React pour refaire notre interface utilisateur.,InnovArt,frontend.jpg,1,React
+Data Scientist Junior,Analyse de données et mise en place de modèles prédictifs.,DataCorp,data-science.jpg,1,Python
+Full Stack Engineer,Développement bout en bout avec Node.js et Vue.js.,WebGenix,fullstack.jpg,1,JavaScript
+Administrateur Système,Gestion de l'infrastructure cloud et déploiement Docker.,CloudScale,sysadmin.jpg,1,Docker
+Mobile Developer,Création d'applications mobiles performantes avec React Native.,AppMaster,mobile.jpg,1,React
