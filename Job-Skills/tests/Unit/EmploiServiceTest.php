@@ -23,7 +23,7 @@ class EmploiServiceTest extends TestCase
 
     public function test_it_can_get_all_jobs()
     {
-        $result = $this->service->getAllJobs();
+        $result = $this->service->getJobs();
 
         $this->assertGreaterThan(0, $result->count());
     }
@@ -38,24 +38,24 @@ class EmploiServiceTest extends TestCase
         $this->assertEquals($job->title, $result->title);
     }
 
-    public function test_it_can_search_jobs_by_title()
+    public function test_it_can_search_jobs_by_title_or_company()
     {
         $job = Emploi::first();
         $searchTerm = substr($job->title, 0, 5);
 
-        $result = $this->service->searchJobs($searchTerm);
+        $result = $this->service->getJobs(['search' => $searchTerm]);
 
         $this->assertGreaterThan(0, $result->count());
 
         $firstJob = $result->first();
-        $this->assertStringContainsString($searchTerm, $firstJob->title);
+        $this->assertTrue(str_contains($firstJob->title, $searchTerm) || str_contains($firstJob->company, $searchTerm));
     }
 
     public function test_it_can_filter_jobs_by_skill()
     {
         $skill = Skills::whereHas('emplois')->first();
 
-        $result = $this->service->filterBySkill($skill->id);
+        $result = $this->service->getJobs(['skill' => $skill->id]);
 
         $this->assertGreaterThan(0, $result->count());
 

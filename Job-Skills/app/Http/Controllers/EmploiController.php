@@ -6,26 +6,24 @@ use Illuminate\Http\Request;
 use App\Models\Emploi;
 use App\Models\Skills;
 use App\Models\User;
+use App\Services\EmploiService;
 
 
-    class EmploiController extends Controller
+class EmploiController extends Controller
 {
+    protected $emploiService;
+
+    public function __construct(EmploiService $emploiService)
+    {
+        $this->emploiService = $emploiService;
+    }
+
     public function index(Request $request)
     {
-        $query = Emploi::with('skills')->latest();
-
-        if ($request->filled('skill')) {
-            $query->whereHas('skills', function ($q) use ($request) {
-                $q->where('skills.id', $request->skill);
-            });
-        }
-
-        if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
-        }
+        $emplois = $this->emploiService->getJobs($request->all(), 5);
 
         return view('emplois.index', [
-            'emplois' => $query->paginate(5),
+            'emplois' => $emplois,
             'skills'  => Skills::all(),
         ]);
     }
@@ -45,13 +43,7 @@ use App\Models\User;
             $data['image'] = $request->file('image')->store('emplois', 'public');
         }
 
-        $data['user_id'] = auth()->id() ?? User::first()->id;
-
-        $emploi = Emploi::create($data);
-
-        if ($request->skills) {
-            $emploi->skills()->attach($request->skills);
-        }
+        $emploi = $this->emploiService->createJob($data);
 
         return response()->json([
             'success' => true,
@@ -62,23 +54,10 @@ use App\Models\User;
 
     public function search(Request $request)
     {
-        $query = Emploi::with('skills')->latest();
-
-        if ($request->filled('skill')) {
-            $query->whereHas('skills', fn ($q) =>
-                $q->where('skills.id', $request->skill)
-            );
-        }
-
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('title', 'like', '%' . $request->search . '%')
-                  ->orWhere('company', 'like', '%' . $request->search . '%');
-            });
-        }
+        $emplois = $this->emploiService->getJobs($request->all());
 
         return view('emplois._table_body', [
-            'emplois' => $query->get(),
+            'emplois' => $emplois,
             'skills' => Skills::all() 
         ]);
     }

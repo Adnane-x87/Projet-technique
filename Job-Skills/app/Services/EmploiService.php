@@ -6,8 +6,24 @@ use App\Models\Emploi;
 
 class EmploiService {
 
-  public function getAllJobs(){
-    return Emploi::with(['skills','user'])->latest()->get();
+  public function getJobs(array $filters = [], int $perPage = 0)
+  {
+      $query = Emploi::with(['skills', 'user'])->latest();
+
+      if (isset($filters['search']) && $filters['search'] !== '') {
+          $query->where(function($q) use ($filters) {
+              $q->where('title', 'LIKE', "%{$filters['search']}%")
+                ->orWhere('company', 'LIKE', "%{$filters['search']}%");
+          });
+      }
+
+      if (isset($filters['skill']) && $filters['skill'] !== '') {
+          $query->whereHas('skills', function($q) use ($filters) {
+              $q->where('skills.id', $filters['skill']);
+          });
+      }
+
+      return $perPage > 0 ? $query->paginate($perPage) : $query->get();
   }
 
   public function getJobId($id){
@@ -53,17 +69,5 @@ class EmploiService {
     $job->delete();
   }
 
-  public function searchJobs($search){
-    return Emploi::with(['skills','user'])
-      ->where('title','LIKE',"%{$search}%")
-      ->get();
-  }
 
-  public function filterBySkill($skillId){
-    return Emploi::with(['skills','user'])
-      ->whereHas('skills', function($query) use ($skillId){
-        $query->where('skills.id', $skillId);
-      })
-      ->get();
-  }
 }
