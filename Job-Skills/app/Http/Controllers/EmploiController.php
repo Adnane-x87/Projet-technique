@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Emploi;
-use App\Models\Skills;
 use App\Models\User;
 use App\Services\EmploiService;
+use App\Services\SkillsService;
 
 
 class EmploiController extends Controller
 {
     protected $emploiService;
+    protected $skillsService;
 
-    public function __construct(EmploiService $emploiService)
+    public function __construct(EmploiService $emploiService, SkillsService $skillsService)
     {
         $this->emploiService = $emploiService;
+        $this->skillsService = $skillsService;
     }
 
     public function index(Request $request)
@@ -24,7 +26,7 @@ class EmploiController extends Controller
 
         return view('emplois.index', [
             'emplois' => $emplois,
-            'skills'  => Skills::all(),
+            'skills'  => $this->skillsService->getAllSkills(),
         ]);
     }
 
@@ -58,7 +60,7 @@ class EmploiController extends Controller
 
         return view('emplois._table_body', [
             'emplois' => $emplois,
-            'skills' => Skills::all() 
+            'skills' => $this->skillsService->getAllSkills() 
         ]);
     }
 }
