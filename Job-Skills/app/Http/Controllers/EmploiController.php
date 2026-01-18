@@ -33,12 +33,11 @@ class EmploiController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => 'required|string|max:255',
-            'company' => 'required|string|max:255',
-            'description' => 'required|string',
+            'title' => 'required',
+            'company' => 'required',
+            'description' => 'required',
             'skills' => 'array',
-            'skills.*' => 'exists:skills,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image',
         ]);
 
         if ($request->hasFile('image')) {
