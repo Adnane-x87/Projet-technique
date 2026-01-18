@@ -40,10 +40,6 @@ class EmploiController extends Controller
             'image' => 'nullable|image',
         ]);
 
-        if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('emplois', 'public');
-        }
-
         $emploi = $this->emploiService->createJob($data);
 
         return response()->json([
