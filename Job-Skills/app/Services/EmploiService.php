@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Emploi;
+use App\Models\User;
 
 class EmploiService {
 
@@ -31,12 +32,17 @@ class EmploiService {
   }
 
   public function createJob(array $data){
+    $imagePath = null;
+    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+        $imagePath = $data['image']->store('jobs', 'public');
+    }
+
     $job = Emploi::create([
       'title' => $data['title'],
       'description' => $data['description'],
       'company' => $data['company'],
-      'image' => $data['image'] ?? null,
-      'user_id' => auth()->id() ?? 1
+      'image' => $imagePath,
+      'user_id' => auth()->id() ?? User::first()?->id ?? 1
     ]);
 
     if (isset($data['skills'])){
@@ -48,12 +54,17 @@ class EmploiService {
 
   public function updateJob($id , array $data){
     $job = Emploi::findOrFail($id);
+    
+    $imagePath = $job->image;
+    if (isset($data['image']) && $data['image'] instanceof \Illuminate\Http\UploadedFile) {
+        $imagePath = $data['image']->store('jobs', 'public');
+    }
 
     $job->update([
       'title' => $data['title'],
       'description' => $data['description'],
       'company' => $data['company'],
-      'image' => $data['image'] ?? $job->image
+      'image' => $imagePath
     ]);
 
     if (isset($data['skills'])){
