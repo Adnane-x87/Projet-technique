@@ -1,10 +1,5 @@
-// =====================================
-// Emploi.js - All JavaScript for Job-Skills Project
-// =====================================
-
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Common elements
     const searchInput = document.getElementById('search-input');
     const skillFilter = document.getElementById('skill-filter');
     const resetBtn = document.getElementById('reset-filters');
@@ -14,25 +9,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let debounceTimer;
     let currentJobId = null;
 
-    // =====================================
-    // PUBLIC PAGE (emplois/index)
-    // =====================================
-    
     const jobsGrid = document.getElementById('jobs-grid');
     const resultsCount = document.getElementById('results-count');
     const emptyState = document.getElementById('empty-state');
     
-    // =====================================
-    // ADMIN PAGE (dashboard)
-    // =====================================
-    
     const jobsTableBody = document.getElementById('jobs-table-body');
     const jobModal = document.getElementById('jobModal');
     const jobForm = document.getElementById('jobForm');
-
-    // =====================================
-    // COMMON FUNCTIONS
-    // =====================================
 
     function resetFilters() {
         if (searchInput) searchInput.value = '';
@@ -40,10 +23,6 @@ document.addEventListener('DOMContentLoaded', function() {
         window.location.href = window.location.pathname;
     }
     window.resetFilters = resetFilters;
-
-    // =====================================
-    // PUBLIC PAGE FUNCTIONS
-    // =====================================
 
     function fetchJobsPublic() {
         const search = searchInput?.value || '';
@@ -105,10 +84,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `).join('');
     }
-
-    // =====================================
-    // ADMIN PAGE FUNCTIONS
-    // =====================================
 
     function fetchJobsAdmin() {
         const search = searchInput?.value || '';
@@ -185,10 +160,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         }).join('');
     }
-
-    // =====================================
-    // MODAL FUNCTIONS (Admin Dashboard)
-    // =====================================
 
     function openCreateModal() {
         currentJobId = null;
@@ -298,10 +269,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     window.handleFormSubmit = handleFormSubmit;
 
-    // =====================================
-    // JOB MODAL COMPONENT FUNCTIONS
-    // =====================================
-
     function showModal() {
         const backdrop = document.getElementById('job-modal-backdrop');
         const modal = document.getElementById('job-modal');
@@ -320,11 +287,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     window.closeJobModal = closeJobModal;
 
-    // =====================================
-    // EVENT LISTENERS
-    // =====================================
-
-    // Determine which page we're on and set up appropriate listeners
     const isPublicPage = !!jobsGrid;
     const isAdminPage = !!jobsTableBody;
     const fetchFunction = isAdminPage ? fetchJobsAdmin : fetchJobsPublic;
