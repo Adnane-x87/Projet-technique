@@ -60,30 +60,56 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderJobsPublic(emplois) {
         if (!jobsGrid) return;
-        jobsGrid.innerHTML = emplois.map(job => `
-            <div class="card">
-                <div style="display: flex; gap: 20px; align-items: start; margin-bottom: 15px;">
-                    ${job.image ? `<img src="/storage/${job.image}" alt="${job.company}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">` : ''}
-                    <div>
-                        <h2 style="font-size: 1.5rem; margin-bottom: 5px;">${job.title}</h2>
-                        <p style="color: #666; font-size: 1.1rem;">${job.company}</p>
+        jobsGrid.className = "grid sm:grid-cols-2 lg:grid-cols-3 gap-6";
+        jobsGrid.innerHTML = emplois.map(job => {
+            const skillBadge = job.skills.length > 0 ? 
+                `<span class="py-1 px-3 bg-white/90 backdrop-blur shadow-sm rounded-full text-[10px] font-bold text-blue-600 uppercase tracking-widest">${job.skills[0].name}</span>` : '';
+            
+            return `
+            <a href="${job.url}" class="group flex flex-col bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all overflow-hidden h-full">
+                <div class="aspect-video relative overflow-hidden bg-slate-50 border-b border-gray-100">
+                    ${job.image ? 
+                        `<img src="/storage/${job.image}" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500" alt="${job.company}">` : 
+                        `<div class="flex items-center justify-center h-full bg-slate-50">
+                            <svg class="size-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                        </div>`
+                    }
+                    <div class="absolute top-3 right-3 text-right">
+                        ${skillBadge}
                     </div>
                 </div>
 
-                <div style="margin-bottom: 20px; color: #444; line-height: 1.6; white-space: pre-line;">
-                    ${job.description}
+                <div class="p-5 flex flex-col flex-1">
+                    <h3 class="text-lg font-bold text-gray-800 group-hover:text-blue-600 transition-colors">
+                        ${job.title}
+                    </h3>
+                    <p class="mt-2 text-sm text-gray-500 line-clamp-2">
+                        ${job.description}
+                    </p>
+                    
+                    <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                        <div class="flex items-center gap-x-2">
+                            <div class="size-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600">
+                                <svg class="size-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-medium text-gray-600 line-clamp-1">${job.company}</span>
+                        </div>
+                        <div class="flex items-center text-blue-600 font-semibold text-sm">
+                            Voir détails
+                            <svg class="size-4 ms-1 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
-
-                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                    ${job.skills.map(s => `<span style="background: #e0e0e0; padding: 5px 12px; border-radius: 4px; font-size: 14px;">${s.name}</span>`).join('')}
-                </div>
-
-                <div style="margin-top: 20px; text-align: right;">
-                    <a href="${job.url}" class="btn btn-primary">Voir l'offre</a>
-                </div>
-            </div>
-        `).join('');
+            </a>
+        `}).join('');
     }
+
 
     function fetchJobsAdmin() {
         const search = searchInput?.value || '';
