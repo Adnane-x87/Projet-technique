@@ -211,17 +211,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function openCreateModal() {
-        currentJobId = null;
+        const modal = document.getElementById('jobModal');
+        const form = document.getElementById('jobForm');
         const modalTitle = document.getElementById('modalTitle');
         const method = document.getElementById('method');
         
+        console.log('openCreateModal called', { modal, form, modalTitle });
+        
+        currentJobId = null;
         if (modalTitle) modalTitle.textContent = 'Ajouter une offre';
         if (method) method.value = 'POST';
-        if (jobForm) jobForm.reset();
+        if (form) form.reset();
         document.querySelectorAll('input[name="skills[]"]').forEach(cb => cb.checked = false);
-        if (jobModal) {
-            jobModal.classList.add('active');
+        if (modal) {
+            console.log('Adding active class to modal');
+            modal.classList.add('active');
             document.body.style.overflow = 'hidden';
+        } else {
+            console.log('Modal not found!');
         }
     }
     window.openCreateModal = openCreateModal;
@@ -252,8 +259,9 @@ document.addEventListener('DOMContentLoaded', function() {
     window.openEditModal = openEditModal;
 
     function closeModal() {
-        if (jobModal) {
-            jobModal.classList.remove('active');
+        const modal = document.getElementById('jobModal');
+        if (modal) {
+            modal.classList.remove('active');
             document.body.style.overflow = '';
         }
     }
@@ -364,16 +372,17 @@ document.addEventListener('DOMContentLoaded', function() {
         resetBtn.addEventListener('click', resetFilters);
     }
 
-    if (jobModal) {
-        jobModal.addEventListener('click', (e) => {
-            if (e.target === jobModal) {
-                closeModal();
-            }
-        });
-    }
+    // Modal click handler - delegate
+    document.addEventListener('click', (e) => {
+        const modal = document.getElementById('jobModal');
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
 
-    if (jobForm) {
-        jobForm.addEventListener('submit', handleFormSubmit);
+    const form = document.getElementById('jobForm');
+    if (form) {
+        form.addEventListener('submit', handleFormSubmit);
     }
 
     document.addEventListener('keydown', e => {

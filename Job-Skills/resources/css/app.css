@@ -15,10 +15,19 @@
 }
 
 /* Modal Transitions */
-#jobModal.active {
+#jobModal {
     display: flex !important;
-    opacity: 1;
-    pointer-events: auto;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease-in-out;
+}
+#jobModal > div {
+    transform: scale(0.95);
+    transition: all 0.3s ease-in-out;
+}
+#jobModal.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
 }
 #jobModal.active > div {
     transform: scale(1);

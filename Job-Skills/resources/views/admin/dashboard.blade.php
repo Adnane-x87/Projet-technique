@@ -226,7 +226,7 @@
     </div>
 
     <!-- Modal Backdrop -->
-    <div id="jobModal" class="hidden fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+    <div id="jobModal" class="fixed inset-0 bg-gray-900/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
         <!-- Modal Content -->
         <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col transform transition-all duration-300 scale-95">
             <!-- Modal Header -->
