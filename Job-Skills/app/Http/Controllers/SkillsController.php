@@ -16,9 +16,7 @@ class SkillsController extends Controller
         return view('skills.index', compact('skills'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(Request $request)
     {
         $validated = $request->validate([
