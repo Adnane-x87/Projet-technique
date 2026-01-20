@@ -137,22 +137,33 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!jobsTableBody) return;
         
         if (emplois.length === 0) {
-            jobsTableBody.innerHTML =
-                `<tr><td colspan="5" style="padding: 30px; text-align: center; color: #666;">Aucune offre trouvée.</td></tr>`;
+            jobsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                        <div class="flex flex-col items-center">
+                            <svg class="h-12 w-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>
+                            </svg>
+                            <p class="text-lg font-medium">Aucune offre trouvée</p>
+                        </div>
+                    </td>
+                </tr>`;
             return;
         }
 
         jobsTableBody.innerHTML = emplois.map(job => {
             const skillsHtml = job.skills.slice(0, 2).map(s =>
-                `<span style="background: #e0e0e0; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-right: 3px;">${s.name}</span>`
+                `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">${s.name}</span>`
             ).join('');
 
             const extraSkills = job.skills.length > 2 ?
-                `<span style="color: #999; font-size: 11px;">+${job.skills.length - 2}</span>` : '';
+                `<span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-50 text-blue-600">+${job.skills.length - 2}</span>` : '';
 
             const imageHtml = job.image ?
-                `<img src="/storage/${job.image}" style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">` :
-                '';
+                `<img src="/storage/${job.image}" class="h-8 w-8 rounded-md object-cover mr-3 border border-gray-100 shadow-sm">` :
+                `<div class="h-8 w-8 rounded-md bg-gray-100 flex items-center justify-center mr-3 border border-gray-100">
+                    <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/></svg>
+                </div>`;
 
             const safeTitle = job.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
             const safeCompany = job.company.replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -160,27 +171,39 @@ document.addEventListener('DOMContentLoaded', function() {
             const skillsJson = JSON.stringify(job.skills.map(s => s.id));
 
             return `
-                <tr style="border-bottom: 1px solid #eee;">
-                    <td style="padding: 12px 0;">${job.title}</td>
-                    <td style="padding: 12px 0;">
-                        <div style="display: flex; align-items: center; gap: 10px;">
+                <tr class="hover:bg-gray-50/80 transition-colors">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-semibold text-gray-900">${job.title}</div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
                             ${imageHtml}
-                            ${job.company}
+                            <div class="text-sm text-gray-600">${job.company}</div>
                         </div>
                     </td>
-                    <td style="padding: 12px 0;">
-                        ${skillsHtml}
-                        ${extraSkills}
+                    <td class="px-6 py-4">
+                        <div class="flex flex-wrap gap-1.5">
+                            ${skillsHtml}
+                            ${extraSkills}
+                        </div>
                     </td>
-                    <td style="padding: 12px 0; color: #666; font-size: 13px;">
-                        ${job.date}
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-xs text-gray-500">${job.date}</div>
                     </td>
-                    <td style="padding: 12px 0; text-align: right;">
-                        <button onclick='openEditModal(${job.id}, "${safeTitle}", "${safeCompany}", "${safeDesc}", ${skillsJson})'
-                            class="btn" style="padding: 4px 10px; font-size: 12px;">Modifier</button>
-                        
-                        <button onclick="deleteJob(${job.id})" class="btn btn-danger"
-                            style="padding: 4px 10px; font-size: 12px;">Supprimer</button>
+                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div class="flex justify-end gap-2">
+                            <button onclick='openEditModal(${job.id}, "${safeTitle}", "${safeCompany}", "${safeDesc}", ${skillsJson})'
+                                class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Modifier">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
+                            <button onclick="deleteJob(${job.id})" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Supprimer">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </div>
                     </td>
                 </tr>
             `;
@@ -196,7 +219,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (method) method.value = 'POST';
         if (jobForm) jobForm.reset();
         document.querySelectorAll('input[name="skills[]"]').forEach(cb => cb.checked = false);
-        if (jobModal) jobModal.style.display = 'flex';
+        if (jobModal) {
+            jobModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
     }
     window.openCreateModal = openCreateModal;
 
@@ -218,12 +244,18 @@ document.addEventListener('DOMContentLoaded', function() {
             cb.checked = skillIds.includes(parseInt(cb.value));
         });
 
-        if (jobModal) jobModal.style.display = 'flex';
+        if (jobModal) {
+            jobModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
     }
     window.openEditModal = openEditModal;
 
     function closeModal() {
-        if (jobModal) jobModal.style.display = 'none';
+        if (jobModal) {
+            jobModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
     }
     window.closeModal = closeModal;
 

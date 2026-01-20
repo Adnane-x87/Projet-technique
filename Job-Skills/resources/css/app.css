@@ -13,3 +13,13 @@
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 }
+
+/* Modal Transitions */
+#jobModal.active {
+    display: flex !important;
+    opacity: 1;
+    pointer-events: auto;
+}
+#jobModal.active > div {
+    transform: scale(1);
+}
