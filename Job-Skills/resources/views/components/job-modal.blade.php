@@ -101,47 +101,5 @@
 </div>
 
 <script>
-function openCreateModal() {
-    document.getElementById('modal-title').textContent = 'Ajouter un emploi';
-    document.getElementById('job-form').action = '{{ route("emplois.store") }}';
-    document.getElementById('form-method').value = 'POST';
-    document.getElementById('modal-job-title').value = '';
-    document.getElementById('modal-job-company').value = '';
-    document.getElementById('modal-job-description').value = '';
-    document.getElementById('modal-job-image').value = '';
-    document.querySelectorAll('#modal-skills-container input').forEach(cb => cb.checked = false);
-    showModal();
-}
-
-function openEditModal(id, title, company, description, image, skillIds) {
-    document.getElementById('modal-title').textContent = 'Modifier l\'emploi';
-    document.getElementById('job-form').action = '/emplois/' + id;
-    document.getElementById('form-method').value = 'PUT';
-    document.getElementById('modal-job-title').value = title;
-    document.getElementById('modal-job-company').value = company;
-    document.getElementById('modal-job-description').value = description;
-    document.getElementById('modal-job-image').value = image || '';
-    document.querySelectorAll('#modal-skills-container input').forEach(cb => {
-        cb.checked = skillIds.includes(parseInt(cb.value));
-    });
-    showModal();
-}
-
-function showModal() {
-    const backdrop = document.getElementById('job-modal-backdrop');
-    const modal = document.getElementById('job-modal');
-    backdrop.classList.remove('hidden');
-    modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeJobModal() {
-    const backdrop = document.getElementById('job-modal-backdrop');
-    const modal = document.getElementById('job-modal');
-    backdrop.classList.add('hidden');
-    modal.classList.add('hidden');
-    document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeJobModal(); });
+    window.emploisStoreRoute = '{{ route("emplois.store") }}';
 </script>
