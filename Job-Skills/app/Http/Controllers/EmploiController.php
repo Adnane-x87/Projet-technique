@@ -27,6 +27,10 @@ class EmploiController extends Controller
         );
         $skills = $this->skillsService->getAllSkills();
         
+        if ($request->ajax()) {
+            return view('emplois._table_body', compact('emplois'))->render();
+        }
+
         return view('emplois.index', compact('emplois', 'skills'));
     }
 
