@@ -17,51 +17,6 @@
             </button>
         </div>
 
-        <!-- Stats Grid -->
-        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 mb-8">
-            <!-- Total Offres Card -->
-            <div class="bg-white overflow-hidden shadow rounded-xl border border-gray-100 hover:shadow-md transition-shadow dark:bg-zinc-900 dark:border-zinc-800">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-blue-50 rounded-lg p-3">
-                            <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                            </svg>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-zinc-400 truncate uppercase tracking-wider">Total Offres</dt>
-                                <dd class="flex items-baseline">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $emplois->count() }}</div>
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Compétences Card -->
-            <div class="bg-white overflow-hidden shadow rounded-xl border border-gray-100 hover:shadow-md transition-shadow dark:bg-zinc-900 dark:border-zinc-800">
-                <div class="p-5">
-                    <div class="flex items-center">
-                        <div class="flex-shrink-0 bg-indigo-50 rounded-lg p-3">
-                            <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
-                            </svg>
-                        </div>
-                        <div class="ml-5 w-0 flex-1">
-                            <dl>
-                                <dt class="text-sm font-medium text-gray-500 dark:text-zinc-400 truncate uppercase tracking-wider">Compétences</dt>
-                                <dd class="flex items-baseline">
-                                    <div class="text-2xl font-bold text-gray-900 dark:text-white">{{ $skills->count() }}</div>
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Search & Filter Area -->
         <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 dark:bg-zinc-900 dark:border-zinc-800">
             <div class="flex flex-col md:flex-row gap-4">
