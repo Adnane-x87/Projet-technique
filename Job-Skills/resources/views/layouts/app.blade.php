@@ -14,16 +14,12 @@
 <body class="bg-white text-gray-800 font-sans antialiased">
     <!-- Header -->
     <header class="bg-white border-b border-gray-100 sticky top-0 z-50">
-        <nav class="max-w-[85rem] w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <nav class="max-w-[85rem] w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-center">
             <a class="flex items-center gap-2 text-xl font-bold text-gray-800 hover:text-blue-600 transition-colors"
                 href="{{ url('/') }}">
                 <img src="{{ asset('images/logo.png') }}" alt="JobSkills Logo" class="h-10 w-auto">
                 <span>JobSkills</span>
             </a>
-            <div class="flex items-center gap-6 font-medium text-gray-600">
-                <a href="{{ route('emplois.index') }}" class="hover:text-blue-600 transition-colors">Offres</a>
-                <a href="{{ route('admin.dashboard') }}" class="hover:text-blue-600 transition-colors">Dashboard</a>
-            </div>
         </nav>
     </header>
 

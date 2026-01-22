@@ -111,7 +111,7 @@ class EmploiController extends Controller
     public function destroy(Emploi $emploi)
     {
         $this->emploiService->deleteJob($emploi->id);
-        return redirect()->route('emplois.index')->with('success', 'Job deleted successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'Job deleted successfully.');
     }
 
     public function search(Request $request)

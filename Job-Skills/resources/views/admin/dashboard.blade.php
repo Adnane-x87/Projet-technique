@@ -71,9 +71,7 @@
                             <th scope="col"
                                 class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                 Compétences</th>
-                            <th scope="col"
-                                class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                Publiée le</th>
+
                             <th scope="col"
                                 class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                 Actions</th>
@@ -119,16 +117,12 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="text-xs text-gray-500">{{ $emploi->created_at->translatedFormat('d M Y') }}
-                                    </div>
-                                </td>
+
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex justify-end gap-1">
                                         <button
                                             onclick='openEditModal({{ $emploi->id }}, {{ json_encode($emploi->title) }}, {{ json_encode($emploi->company) }}, {{ json_encode($emploi->description) }}, {{ json_encode($emploi->skills->pluck('id')) }})'
-                                            class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                            title="Modifier">
+                                            class="p-2 text-blue-600 rounded-lg" title="Modifier">
                                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -139,8 +133,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" onclick="return confirm('Confirmer la suppression ?')"
-                                                class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                title="Supprimer">
+                                                class="p-2 text-red-600 rounded-lg" title="Supprimer">
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -153,7 +146,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                <td colspan="4" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center">
                                         <div
                                             class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-3">
