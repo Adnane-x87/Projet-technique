@@ -1,51 +1,73 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
 @section('content')
-<div class="bg-white dark:bg-zinc-950 shadow rounded-lg p-6 max-w-xl mx-auto border border-transparent dark:border-zinc-800">
+    <div class="max-w-3xl mx-auto px-4 py-12">
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
 
-    <h2 class="text-2xl font-bold mb-4 text-gray-800 dark:text-white">{{ $emploi->title }}</h2>
+            <!-- Image Header -->
+            @if ($emploi->image)
+                <div class="aspect-[3/1] w-full overflow-hidden bg-gray-100">
+                    <img src="{{ asset('storage/' . $emploi->image) }}" alt="{{ $emploi->company }}"
+                        class="w-full h-full object-cover">
+                </div>
+            @endif
 
-    @if ($emploi->image)
-        <div class="mb-6">
-            <img src="{{ asset('storage/' . $emploi->image) }}" alt="{{ $emploi->company }}" class="w-full h-48 object-cover rounded-lg">
-        </div>
-    @endif
+            <div class="p-6 md:p-8">
+                <!-- Company Badge -->
+                <div class="flex items-center gap-2 mb-4">
+                    <div
+                        class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-sm font-semibold">
+                        {{ substr($emploi->company, 0, 1) }}
+                    </div>
+                    <span class="text-sm text-gray-500 font-medium">{{ $emploi->company }}</span>
+                </div>
 
-    <p class="text-gray-700 dark:text-zinc-300 mb-2">
-        <strong class="font-semibold">Entreprise :</strong> {{ $emploi->company }}
-    </p>
-    <p class="text-gray-700 dark:text-zinc-300 mb-2">
-        <strong class="font-semibold">Publiée le :</strong> {{ $emploi->created_at->translatedFormat('d M Y') }}
-    </p>
+                <!-- Title -->
+                <h1 class="text-2xl font-bold text-gray-900 mb-4">{{ $emploi->title }}</h1>
 
-    @if($emploi->skills->count() > 0)
-    <div class="mb-4">
-        <strong class="block font-semibold text-gray-700 dark:text-zinc-300 mb-2">Compétences :</strong>
-        <div class="flex flex-wrap gap-2">
-            @foreach ($emploi->skills as $skill)
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
-                    {{ $skill->name }}
-                </span>
-            @endforeach
+                <!-- Meta Info -->
+                <div class="flex items-center gap-4 text-sm text-gray-500 mb-6">
+                    <div class="flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span>{{ $emploi->created_at->translatedFormat('d M Y') }}</span>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                @if ($emploi->skills->count() > 0)
+                    <div class="mb-6">
+                        <h3 class="text-sm font-medium text-gray-700 mb-2">Compétences requises</h3>
+                        <div class="flex flex-wrap gap-2">
+                            @foreach ($emploi->skills as $skill)
+                                <span
+                                    class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600">
+                                    {{ $skill->name }}
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Description -->
+                <div class="pt-6 border-t border-gray-100">
+                    <h3 class="text-sm font-medium text-gray-700 mb-3">Description du poste</h3>
+                    <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ $emploi->description }}</p>
+                </div>
+
+                <!-- Back Link -->
+                <div class="mt-8 pt-6 border-t border-gray-100">
+                    <a href="{{ route('emplois.index') }}"
+                        class="inline-flex items-center gap-2 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Retour aux offres
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-    @endif
-
-    <div class="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Description</h3>
-        <p class="text-gray-600 dark:text-zinc-400 whitespace-pre-line">{{ $emploi->description }}</p>
-    </div>
-
-    <a href="{{ route('emplois.index') }}"
-    class="mt-6 inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 hover:underline dark:text-blue-400 dark:hover:text-blue-300 transition-colors">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i> Retour aux offres
-    </a>
-
-</div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        if(window.lucide) window.lucide.createIcons();
-    });
-</script>
 @endsection

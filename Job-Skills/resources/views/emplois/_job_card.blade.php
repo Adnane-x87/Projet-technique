@@ -1,88 +1,94 @@
 @forelse($emplois as $emploi)
-    <div class="group flex flex-col h-full bg-white border border-gray-200 rounded-2xl p-4 transition-all hover:shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
-        
+    <div
+        class="group flex flex-col bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md hover:border-gray-300 transition-all duration-200">
+
         <!-- Image Section -->
-        <div class="relative w-full aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:bg-gradient-to-br dark:from-zinc-950 dark:to-zinc-900 flex-shrink-0">
+        <div class="relative aspect-[16/10] overflow-hidden bg-gray-100">
             @php
                 $imagePath = $emploi->image;
                 $isUrl = str_starts_with($imagePath, 'http');
-                $fileExists = $isUrl || ($imagePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath));
+                $fileExists =
+                    $isUrl || ($imagePath && \Illuminate\Support\Facades\Storage::disk('public')->exists($imagePath));
             @endphp
 
-            @if($fileExists)
-                <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                     src="{{ $isUrl ? $imagePath : asset('storage/' . $imagePath) }}" 
-                     alt="{{ $emploi->title }}"
-                     onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-gray-100 to-gray-200 dark:bg-zinc-950\'><div class=\'w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-3 dark:bg-blue-900/20\'><i data-lucide=\'briefcase\' class=\'w-8 h-8 text-blue-600 dark:text-blue-400\'></i></div><span class=\'text-xs font-bold text-gray-700 dark:text-zinc-400 uppercase tracking-widest\'>Logo non disponible</span></div>'">
+            @if ($fileExists)
+                <img class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    src="{{ $isUrl ? $imagePath : asset('storage/' . $imagePath) }}" alt="{{ $emploi->title }}"
+                    onerror="this.parentElement.innerHTML='<div class=\'w-full h-full flex items-center justify-center bg-gray-100\'><svg class=\'w-12 h-12 text-gray-300\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.5\' d=\'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4\'/></svg></div>'">
             @else
-                <div class="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-gray-100 to-gray-200 dark:bg-zinc-950">
-                    <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center mb-3 dark:bg-blue-900/20">
-                        <i data-lucide="briefcase" class="w-8 h-8 text-blue-600 dark:text-blue-400"></i>
-                    </div>
-                    <span class="text-xs font-bold text-gray-700 dark:text-zinc-400 uppercase tracking-widest">Logo non disponible</span>
+                <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
                 </div>
             @endif
-
-            <!-- Company Overlay -->
-            <div class="absolute bottom-3 left-3">
-                <div class="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-lg border border-white/30 shadow-md flex items-center gap-2 dark:bg-zinc-900/95 dark:border-zinc-800">
-                    <div class="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-[8px]">
-                        {{ substr($emploi->company, 0, 1) }}
-                    </div>
-                    <span class="text-[10px] font-bold text-gray-900 dark:text-white uppercase tracking-wider">{{ $emploi->company }}</span>
-                </div>
-            </div>
         </div>
 
         <!-- Content Section -->
-        <div class="pt-5 flex-grow flex flex-col">
-            <!-- Categories/Skills -->
-            <div class="flex flex-wrap gap-2 mb-3">
-                @foreach($emploi->skills->take(3) as $skill)
-                    <span class="text-[10px] font-bold uppercase tracking-widest text-blue-700 bg-blue-50 px-2.5 py-1 rounded-md dark:bg-blue-900/30 dark:text-blue-300">
-                        {{ $skill->name }}
-                    </span>
-                @endforeach
+        <div class="p-5 flex flex-col flex-grow">
+            <!-- Company Badge -->
+            <div class="flex items-center gap-2 mb-3">
+                <div
+                    class="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-semibold">
+                    {{ substr($emploi->company, 0, 1) }}
+                </div>
+                <span class="text-sm text-gray-500 font-medium">{{ $emploi->company }}</span>
             </div>
 
             <!-- Title -->
-            <h3 class="font-bold text-lg text-gray-900 group-hover:text-blue-600 transition-colors leading-tight mb-2 dark:text-white">
-               <a href="{{ route('emplois.show', $emploi) }}">{{ $emploi->title }}</a>
+            <h3
+                class="font-semibold text-gray-900 text-lg leading-tight mb-2 group-hover:text-blue-600 transition-colors">
+                <a href="{{ route('emplois.show', $emploi) }}">{{ $emploi->title }}</a>
             </h3>
 
             <!-- Description -->
-            <p class="text-sm text-gray-700 mb-6 line-clamp-2 dark:text-zinc-400">
+            <p class="text-sm text-gray-500 line-clamp-2 mb-4">
                 {{ $emploi->description }}
             </p>
 
-            <!-- Metadata - Pushed to Bottom of Content Div -->
-            <div class="mt-auto pt-3 flex items-center justify-between text-[11px] font-medium text-gray-600 dark:text-zinc-500">
-                <div class="flex items-center gap-1.5">
-                    <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                    <span>{{ $emploi->created_at->translatedFormat('d M Y') }}</span>
-                </div>
-                <div class="flex items-center gap-1.5">
-                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                    <span>Casablanca</span>
-                </div>
+            <!-- Skills Tags -->
+            <div class="flex flex-wrap gap-1.5 mb-4">
+                @foreach ($emploi->skills->take(3) as $skill)
+                    <span class="text-xs font-medium text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full">
+                        {{ $skill->name }}
+                    </span>
+                @endforeach
+                @if ($emploi->skills->count() > 3)
+                    <span class="text-xs font-medium text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">
+                        +{{ $emploi->skills->count() - 3 }}
+                    </span>
+                @endif
             </div>
 
-            <!-- Action Button - Always at the bottom -->
-            <div class="mt-5">
-                <a href="{{ route('emplois.show', $emploi) }}" 
-                   class="w-full bg-blue-600 text-white text-[11px] font-bold uppercase tracking-widest py-3.5 px-4 rounded-xl hover:bg-blue-700 transition-all shadow-md active:scale-95 text-center flex items-center justify-center gap-2 group/btn">
-                    Voir les détails
-                    <i data-lucide="arrow-right" class="w-4 h-4 transition-transform group-hover/btn:translate-x-1"></i>
+            <!-- Footer -->
+            <div class="mt-auto pt-4 border-t border-gray-100 flex items-center justify-between">
+                <div class="flex items-center gap-1 text-xs text-gray-400">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <span>{{ $emploi->created_at->translatedFormat('d M Y') }}</span>
+                </div>
+                <a href="{{ route('emplois.show', $emploi) }}"
+                    class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors">
+                    Voir l'offre
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
                 </a>
             </div>
         </div>
     </div>
 @empty
-    <div class="col-span-full py-20 text-center">
-        <div class="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 dark:bg-zinc-900">
-            <i data-lucide="search-x" class="w-10 h-10 text-gray-300"></i>
+    <div class="col-span-full py-16 text-center">
+        <div class="bg-gray-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Aucune offre trouvée</h3>
-        <p class="text-gray-500 dark:text-zinc-400">Essayez de modifier vos filtres ou revenez plus tard.</p>
+        <h3 class="text-lg font-semibold text-gray-900 mb-1">Aucune offre trouvée</h3>
+        <p class="text-gray-500 text-sm">Essayez de modifier vos filtres ou revenez plus tard.</p>
     </div>
 @endforelse
