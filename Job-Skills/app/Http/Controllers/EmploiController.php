@@ -6,6 +6,7 @@ use App\Models\Emploi;
 use App\Services\EmploiService;
 use App\Services\SkillsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EmploiController extends Controller
 {
@@ -36,6 +37,8 @@ class EmploiController extends Controller
 
     public function manage(Request $request)
     {
+        Gate::authorize('access-admin');
+
         $emplois = $this->emploiService->searchAndFilter(
             $request->get('search'),
             $request->get('skill'),
@@ -48,12 +51,15 @@ class EmploiController extends Controller
 
     public function create()
     {
+        Gate::authorize('manage-jobs');
         $skills = $this->skillsService->getAllSkills();
         return view('emplois.create', compact('skills'));
     }
 
     public function store(Request $request)
     {
+        Gate::authorize('manage-jobs');
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -63,7 +69,7 @@ class EmploiController extends Controller
         ]);
 
         $emploi = $this->emploiService->createJob(
-            $validated,
+            $validated + ['user_id' => auth()->id()], // Ensure user_id is passed
             $request->file('image')
         );
 
@@ -71,7 +77,7 @@ class EmploiController extends Controller
             return response()->json(['message' => 'Job created successfully.', 'emploi' => $emploi], 201);
         }
 
-        return redirect()->route('emplois.index')->with('success', 'Job created successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'Job created successfully.');
     }
 
     public function show(Emploi $emploi)
@@ -81,12 +87,15 @@ class EmploiController extends Controller
 
     public function edit(Emploi $emploi)
     {
+        Gate::authorize('update-job', $emploi);
         $skills = $this->skillsService->getAllSkills();
         return view('emplois.edit', compact('emploi', 'skills'));
     }
 
     public function update(Request $request, Emploi $emploi)
     {
+        Gate::authorize('update-job', $emploi);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -105,11 +114,12 @@ class EmploiController extends Controller
             return response()->json(['message' => 'Job updated successfully.', 'emploi' => $emploi->fresh()], 200);
         }
 
-        return redirect()->route('emplois.index')->with('success', 'Job updated successfully.');
+        return redirect()->route('admin.dashboard')->with('success', 'Job updated successfully.');
     }
 
     public function destroy(Emploi $emploi)
     {
+        Gate::authorize('delete-job', $emploi);
         $this->emploiService->deleteJob($emploi->id);
         return redirect()->route('admin.dashboard')->with('success', 'Job deleted successfully.');
     }
