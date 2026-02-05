@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Skills;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class SkillsController extends Controller
 {
@@ -12,6 +13,7 @@ class SkillsController extends Controller
      */
     public function index()
     {
+        Gate::authorize('access-admin');
         $skills = Skills::all();
         return view('skills.index', compact('skills'));
     }
@@ -19,6 +21,7 @@ class SkillsController extends Controller
 
     public function store(Request $request)
     {
+        Gate::authorize('access-admin');
         $validated = $request->validate([
             'name' => 'required|unique:skills,name|max:255',
         ]);
@@ -33,6 +36,7 @@ class SkillsController extends Controller
      */
     public function destroy(Skills $skill) // Note: route binding might require confirming the model name
     {
+        Gate::authorize('access-admin');
         $skill->delete();
         return redirect()->back()->with('success', 'Skill deleted successfully.');
     }

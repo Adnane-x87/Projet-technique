@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Emploi;
 use App\Services\EmploiService;
 use App\Services\SkillsService;
+use App\Http\Requests\StoreEmploiRequest;
+use App\Http\Requests\UpdateEmploiRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 
@@ -56,17 +58,11 @@ class EmploiController extends Controller
         return view('emplois.create', compact('skills'));
     }
 
-    public function store(Request $request)
+    public function store(StoreEmploiRequest $request)
     {
-        Gate::authorize('manage-jobs');
+        // Validation and Authorization handled by StoreEmploiRequest
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'company' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'skills' => 'array|exists:skills,id'
-        ]);
+        $validated = $request->validated();
 
         $emploi = $this->emploiService->createJob(
             $validated + ['user_id' => auth()->id()], // Ensure user_id is passed
@@ -92,17 +88,11 @@ class EmploiController extends Controller
         return view('emplois.edit', compact('emploi', 'skills'));
     }
 
-    public function update(Request $request, Emploi $emploi)
+    public function update(UpdateEmploiRequest $request, Emploi $emploi)
     {
-        Gate::authorize('update-job', $emploi);
+        // Validation and Authorization handled by UpdateEmploiRequest
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'company' => 'required|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'skills' => 'array|exists:skills,id'
-        ]);
+        $validated = $request->validated();
 
         $this->emploiService->updateJob(
             $emploi->id,
