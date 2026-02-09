@@ -36,7 +36,7 @@ paginate: true
 
 # Contexte
 
-<img src="images/La-methode-2TUP-6.png" alt="2tup" width="700"/>
+<img src="images/La-methode-2TUP-6.png" alt="2tup" width="650"/>
 
 --- 
 # Exigences: Analyse Technique
@@ -81,3 +81,47 @@ paginate: true
 
 - Un bouton « Ajouter » qui ouvre une modale pour créer un nouvel emploi.
 - Une barre de recherche filtrant des Emploi par compétences.
+
+---
+
+# Versions
+
+ ### Version 1
+
+ - Public side
+ - Branch public
+
+ ### version 2
+
+ - Admin Side
+- Branch : admin
+
+
+
+### version 3
+
+- Authontification / Authorization (Gates)
+- Branch : gates
+
+---
+### version 4
+
+- SPA (Single Page Application) / AJAX - Alpine.js
+- Branch : spa
+
+### version 5 
+
+- Spatie / Authorization
+- Branch : spatie
+
+### version 6
+
+- API
+- Branch : api
+
+---
+
+### version 7
+
+- Mobile App
+- Branch : mobile
