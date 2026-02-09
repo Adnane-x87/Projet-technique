@@ -25,15 +25,7 @@ Route::get('/emplois/{emploi}', [EmploiController::class, 'show'])->name('emploi
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
-    Route::get('/admin', [EmploiController::class, 'manage'])->name('admin.dashboard');
-    
-    Route::get('/emplois/create', [EmploiController::class, 'create'])->name('emplois.create');
-    Route::post('/emplois', [EmploiController::class, 'store'])->name('emplois.store');
-    Route::get('/emplois/{emploi}/edit', [EmploiController::class, 'edit'])->name('emplois.edit');
-    Route::put('/emplois/{emploi}', [EmploiController::class, 'update'])->name('emplois.update');
-    Route::delete('/emplois/{emploi}', [EmploiController::class, 'destroy'])->name('emplois.destroy'); // Fixed route for DELETE
-
-    Route::resource('skills', SkillsController::class)->only(['index', 'store', 'destroy']);
+    // User specific protected routes can go here if any remain (e.g. applying to jobs)
 });
 
 // AJAX API Route

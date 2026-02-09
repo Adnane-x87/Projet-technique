@@ -24,25 +24,7 @@
                 @auth
                     <div class="flex items-center gap-4">
 
-                        @can('access-admin')
-                            <a href="{{ route('admin.dashboard') }}"
-                                class="text-sm font-medium text-gray-500 hover:text-blue-600 transition-colors">
-                                Tableau de bord
-                            </a>
-                        @endcan
-
                         <div class="text-right">
-                            @if (Auth::user()->is_admin)
-                                <span
-                                    class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    Admin
-                                </span>
-                            @else
-                                <span
-                                    class="inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    User
-                                </span>
-                            @endif
                             <p class="text-sm font-semibold text-gray-800 mt-1">{{ Auth::user()->name }}</p>
                         </div>
                         <form method="POST" action="{{ route('logout') }}" class="inline">
