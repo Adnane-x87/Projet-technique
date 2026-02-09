@@ -21,21 +21,7 @@ class EmploiController extends Controller
         $this->skillsService = $skillsService;
     }
 
-    public function index(Request $request)
-    {
-        $emplois = $this->emploiService->searchAndFilter(
-            $request->get('search'),
-            $request->get('skill'),
-            5
-        );
-        $skills = $this->skillsService->getAllSkills();
-        
-        if ($request->ajax()) {
-            return view('emplois._job_card', compact('emplois'))->render();
-        }
 
-        return view('emplois.index', compact('emplois', 'skills'));
-    }
 
     public function manage(Request $request)
     {
@@ -76,10 +62,7 @@ class EmploiController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Job created successfully.');
     }
 
-    public function show(Emploi $emploi)
-    {
-        return view('emplois.show', compact('emploi'));
-    }
+
 
     public function edit(Emploi $emploi)
     {
@@ -114,18 +97,5 @@ class EmploiController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Job deleted successfully.');
     }
 
-    public function search(Request $request)
-    {
-        $emplois = $this->emploiService->searchAndFilter(
-            $request->get('search'),
-            $request->get('skill')
-        );
 
-        $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
-
-        return response()->json([
-            'count' => $formattedJobs->count(),
-            'emplois' => $formattedJobs
-        ]);
-    }
 }
