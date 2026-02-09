@@ -84,44 +84,18 @@ paginate: true
 
 ---
 
-# Versions
 
- ### Version 1
+## Historique des Versions
 
- - Public side
- - Branch public
+### Version Table
 
- ### version 2
-
- - Admin Side
-- Branch : admin
-
-
-
-### version 3
-
-- Authontification / Authorization (Gates)
-- Branch : gates
-
----
-### version 4
-
-- SPA (Single Page Application) / AJAX - Alpine.js
-- Branch : spa
-
-### version 5 
-
-- Spatie / Authorization
-- Branch : spatie
-
-### version 6
-
-- API
-- Branch : api
-
----
-
-### version 7
-
-- Mobile App
-- Branch : mobile
+| Version | Description | Branch |
+|---------|-------------|--------|
+| v1 | Public Side (Consultation, Recherche, Filtre) | `public` |
+| v2 | Admin Side (CRUD, Modales) | `admin` |
+| v3 | Authentification / Authorization (Gates) | `gates` |
+| v4 | SPA / AJAX | `spa-ajax` |
+| v5 | SPA / Alpine.js | `spa-alpine` |
+| v6 | Spatie / Authorization | `spatie` |
+| v7 | API | `api` |
+| v8 | Mobile App | `mobile` |
