@@ -6,10 +6,10 @@ use App\Models\Emploi;
 use App\Services\EmploiService;
 use App\Services\SkillsService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class EmploiController extends Controller
 {
-    protected $emploiService;
     protected $skillsService;
 
     public function __construct(EmploiService $emploiService, SkillsService $skillsService)
@@ -36,6 +36,9 @@ class EmploiController extends Controller
 
     public function manage(Request $request)
     {
+        // Only admin can access dashboard
+        Gate::authorize('access-admin');
+
         $emplois = $this->emploiService->searchAndFilter(
             $request->get('search'),
             $request->get('skill'),
@@ -48,12 +51,18 @@ class EmploiController extends Controller
 
     public function create()
     {
+        // Only admin can create jobs (as per PROMPT.md 'manage-jobs' gate)
+        Gate::authorize('manage-jobs');
+
         $skills = $this->skillsService->getAllSkills();
         return view('emplois.create', compact('skills'));
     }
 
     public function store(Request $request)
     {
+        // Only admin can store jobs
+        Gate::authorize('manage-jobs');
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -81,12 +90,18 @@ class EmploiController extends Controller
 
     public function edit(Emploi $emploi)
     {
+        // Admin OR Owner
+        Gate::authorize('update-job', $emploi);
+
         $skills = $this->skillsService->getAllSkills();
         return view('emplois.edit', compact('emploi', 'skills'));
     }
 
     public function update(Request $request, Emploi $emploi)
     {
+        // Admin OR Owner
+        Gate::authorize('update-job', $emploi);
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -110,6 +125,9 @@ class EmploiController extends Controller
 
     public function destroy(Emploi $emploi)
     {
+        // Admin OR Owner
+        Gate::authorize('delete-job', $emploi);
+
         $this->emploiService->deleteJob($emploi->id);
         return redirect()->route('admin.dashboard')->with('success', 'Job deleted successfully.');
     }

@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
                     [
                         'name' => $data['name'],
                         'password' => Hash::make($data['password']), 
+                        'is_admin' => $data['email'] === 'ayoub@gmail.com',
                     ]
                 );
             }

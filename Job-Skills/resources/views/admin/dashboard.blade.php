@@ -160,6 +160,7 @@
                 <h1 class="text-2xl font-bold text-gray-900">Tableau de Bord</h1>
                 <p class="mt-1 text-sm text-gray-500">Gérez vos offres d'emploi et suivez vos performances.</p>
             </div>
+            @can('manage-jobs')
             <button @click="openCreateModal()"
                 class="inline-flex items-center px-4 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                 <svg class="-ml-0.5 mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -167,6 +168,7 @@
                 </svg>
                 Ajouter une offre
             </button>
+            @endcan
         </div>
 
         <!-- Search & Filter Area -->
@@ -283,7 +285,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end gap-1">
-                                            <button
+                                            <button x-show="job.can_update"
                                                 @click="openEditModal(job.id, job.title, job.company, job.description, job.skills.map(s => s.id))"
                                                 class="p-2 text-blue-600 rounded-lg hover:bg-blue-50" title="Modifier">
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor"
@@ -292,7 +294,7 @@
                                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
-                                            <button @click="deleteJob(job.id)"
+                                            <button x-show="job.can_delete" @click="deleteJob(job.id)"
                                                 class="p-2 text-red-600 rounded-lg hover:bg-red-50" title="Supprimer">
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor"
                                                     viewBox="0 0 24 24">
@@ -350,6 +352,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <div class="flex justify-end gap-1">
+                                            @can('update-job', $emploi)
                                             <button
                                                 @click="openEditModal({{ $emploi->id }}, {{ json_encode($emploi->title) }}, {{ json_encode($emploi->company) }}, {{ json_encode($emploi->description) }}, {{ json_encode($emploi->skills->pluck('id')) }})"
                                                 class="p-2 text-blue-600 rounded-lg hover:bg-blue-50" title="Modifier">
@@ -359,6 +362,8 @@
                                                         d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </button>
+                                            @endcan
+                                            @can('delete-job', $emploi)
                                             <button @click="deleteJob({{ $emploi->id }})"
                                                 class="p-2 text-red-600 rounded-lg hover:bg-red-50" title="Supprimer">
                                                 <svg class="h-4 w-4" fill="none" stroke="currentColor"
@@ -367,6 +372,7 @@
                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                                 </svg>
                                             </button>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Emploi;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class EmploiService {
 
@@ -105,7 +106,9 @@ class EmploiService {
                 'image' => $emploi->image,
                 'skills' => $emploi->skills->map(fn($s) => ['id' => $s->id, 'name' => $s->name]),
                 'date' => $emploi->created_at->format('d/m/Y'),
-                'url' => route('emplois.show', $emploi)
+                'url' => route('emplois.show', $emploi),
+                'can_update' => Gate::allows('update-job', $emploi),
+                'can_delete' => Gate::allows('delete-job', $emploi),
             ];
         });
     }

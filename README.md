@@ -36,7 +36,7 @@ paginate: true
 
 # Contexte
 
-<img src="images/La-methode-2TUP-6.png" alt="2tup" width="700"/>
+<img src="images/La-methode-2TUP-6.png" alt="2tup" width="650"/>
 
 --- 
 # Exigences: Analyse Technique
