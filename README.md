@@ -34,12 +34,31 @@ paginate: true
 
 ---
 
-# Contexte
+## Exigences: Travail à faire
 
-<img src="images/La-methode-2TUP-6.png" alt="2tup" width="650"/>
+- Développer l'Application Job Skills
+
+- Partie Publique: Interface permettant aux visiteurs de consulter les Emplois. Fonctionnalités : Recherche par titre, filtre par compétences, pagination (10 éléments/page).
+
+- Partie Admin: Tableau de bord sécurisé pour les opérations CRUD. Fonctionnalités : Modales pour ajout/édition, AJAX pour les mises à jour asynchrones.
+
+---
+
+# Contexte: Projet de Fin de Formation
+
+- Projet de Fin de Formation: Travail sur le projet de fin de formation, commençant par la branche technique.
+
+- Processus 2TUP: Le projet suit la méthodologie 2TUP (Processus de développement en Y), séparant les branches Fonctionnelle, Technique et Réalisation.
+
 
 --- 
-# Exigences: Analyse Technique
+<img src="images/La-methode-2TUP-6.png" alt="2tup" width="500"/> 
+
+
+- Solidification des Compétences: Concentration sur le renforcement des compétences Laravel 12 sans outils d'IA, en s'appuyant sur l'expérience précédente à Solicode.
+
+--- 
+# Analyse Technique
 
 
 ## Technologies Utilisées
@@ -99,3 +118,63 @@ paginate: true
 | v6 | Spatie / Authorization | `spatie` |
 | v7 | API | `api` |
 | v8 | Mobile App | `mobile` |
+
+
+---
+
+## v1 Public Side - Live Coding
+
+* Creation du portfolio personnel
+
+**Branch:** `public`
+
+---
+
+## v2 Admin Side - Live Coding
+
+* Gestion des articles (CRUD)
+
+**Branch:** `admin`
+
+---
+
+## v3 Authentification / Authorization - Live Coding
+
+* 
+
+
+---
+
+## v4 SPA / AJAX - Live Coding
+
+* Un bouton "Ajouter" qui ouvre une modale pour créer un nouvel élément
+* Une barre de recherche filtrant des éléments par titre
+
+
+---
+
+## v5 SPA / Alpine.js - Live Coding
+
+* 
+
+
+---
+
+## v6 Spatie / Authorization - Live Coding
+
+* 
+
+
+---
+
+## v7 API - Live Coding
+
+* 
+
+
+---
+
+## v8 Mobile App - Live Coding
+
+* 
+
