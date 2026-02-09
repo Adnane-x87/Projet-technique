@@ -126,15 +126,12 @@ paginate: true
 
 * Creation du portfolio personnel
 
-**Branch:** `public`
 
 ---
 
 ## v2 Admin Side - Live Coding
 
 * Gestion des articles (CRUD)
-
-**Branch:** `admin`
 
 ---
 
