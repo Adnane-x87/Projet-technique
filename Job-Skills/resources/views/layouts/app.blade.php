@@ -80,6 +80,7 @@
             <p>&copy; {{ date('Y') }} Adnane. Tous droits réservés.</p>
         </div>
     </footer>
+    @stack('scripts')
 </body>
 
 </html>
