@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div x-data="jobManager()" x-init="init()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div x-data="emploiManager(@json($emplois->items()), {{ $emplois->total() }})" x-init="init()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
@@ -79,7 +79,8 @@
         <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
                 <h2 class="text-base font-semibold text-gray-900">Offres d'emploi</h2>
-                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600" x-text="total + ' au total'">
+                <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-600"
+                    x-text="total + ' au total'">
                 </span>
             </div>
 
@@ -115,7 +116,8 @@
                                                 class="h-8 w-8 rounded-lg object-cover mr-3 border border-gray-100">
                                         </template>
                                         <template x-if="!job.image">
-                                            <div class="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
+                                            <div
+                                                class="h-8 w-8 rounded-lg bg-gray-100 flex items-center justify-center mr-3">
                                                 <svg class="h-4 w-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd"
                                                         d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
@@ -129,10 +131,14 @@
                                 <td class="px-6 py-4">
                                     <div class="flex flex-wrap gap-1">
                                         <template x-for="skill in job.skills.slice(0, 2)" :key="skill.id">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600" x-text="skill.name"></span>
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600"
+                                                x-text="skill.name"></span>
                                         </template>
                                         <template x-if="job.skills.length > 2">
-                                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600" x-text="'+' + (job.skills.length - 2)"></span>
+                                            <span
+                                                class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-600"
+                                                x-text="'+' + (job.skills.length - 2)"></span>
                                         </template>
                                     </div>
                                 </td>
@@ -141,25 +147,25 @@
                                     <div class="flex justify-end gap-1">
                                         {{-- @can('update-job', $emploi) --}}
                                         <!-- Since we are in Alpine context, we handle permissions via backend validation or passing auth user data. For simplicity here, assuming admin sees buttons but actions are protected. Ideally pass permission flags in JSON. -->
-                                            <button
-                                                @click="openEditModal(job)"
-                                                class="p-2 text-blue-600 rounded-lg" title="Modifier">
-                                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                                </svg>
-                                            </button>
+                                        <button @click="openEditModal(job)" class="p-2 text-blue-600 rounded-lg"
+                                            title="Modifier">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
+                                        </button>
                                         {{-- @endcan --}}
 
                                         {{-- @can('delete-job', $emploi) --}}
-                                            <button @click="deleteJob(job.id)"
-                                                class="p-2 text-red-600 rounded-lg" title="Supprimer">
-                                                <svg class="h-4 w-4" fill="none" stroke="currentColor"
-                                                    viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
+                                        <button @click="deleteJob(job.id)" class="p-2 text-red-600 rounded-lg"
+                                            title="Supprimer">
+                                            <svg class="h-4 w-4" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
                                         {{-- @endcan --}}
                                     </div>
                                 </td>
@@ -194,31 +200,24 @@
     </div>
 
     <!-- Modal Backdrop -->
-    <div x-data
-        x-show="$store.jobModal.open"
-        x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0"
-        x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100"
+    <div x-data x-show="$store.jobModal.open" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-[60] flex items-center justify-center p-4"
         style="display: none;">
 
         <!-- Modal Content -->
-        <div @click.outside="$store.jobModal.close()"
-            x-show="$store.jobModal.open"
-            x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 scale-95"
-            x-transition:enter-end="opacity-100 scale-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 scale-100"
-            x-transition:leave-end="opacity-0 scale-95"
+        <div @click.outside="$store.jobModal.close()" x-show="$store.jobModal.open"
+            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95"
+            x-transition:enter-end="opacity-100 scale-100" x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95"
             class="bg-white rounded-2xl shadow-xl w-full max-w-xl max-h-[90vh] overflow-hidden flex flex-col">
 
             <!-- Modal Header -->
             <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-                <h2 class="text-lg font-bold text-gray-900" x-text="$store.jobModal.isEdit ? 'Modifier l\'offre' : 'Ajouter une offre'"></h2>
+                <h2 class="text-lg font-bold text-gray-900"
+                    x-text="$store.jobModal.isEdit ? 'Modifier l\'offre' : 'Ajouter une offre'"></h2>
                 <button @click="$store.jobModal.close()"
                     class="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-all">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -233,7 +232,8 @@
                     <input type="hidden" x-model="$store.jobModal.form.id">
 
                     <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1.5">Titre du poste</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1.5">Titre du
+                            poste</label>
                         <input type="text" id="title" x-model="$store.jobModal.form.title" required
                             class="block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm"
                             placeholder="ex: Développeur PHP Fullstack">
@@ -247,7 +247,8 @@
                     </div>
 
                     <div>
-                        <label for="description" class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+                        <label for="description"
+                            class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
                         <textarea id="description" x-model="$store.jobModal.form.description" rows="4" required
                             class="block w-full px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm resize-none"
                             placeholder="Détaillez la mission et les pré-requis..."></textarea>
@@ -268,7 +269,8 @@
                                     <label for="image"
                                         class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none">
                                         <span>Télécharger un fichier</span>
-                                        <input id="image" @change="$store.jobModal.handleFile($event)" type="file" class="sr-only" accept="image/*">
+                                        <input id="image" @change="$store.jobModal.handleFile($event)" type="file"
+                                            class="sr-only" accept="image/*">
                                     </label>
                                     <p class="pl-1">ou glisser-déposer</p>
                                 </div>
@@ -283,7 +285,8 @@
                             @foreach ($skills as $skill)
                                 <label
                                     class="relative flex items-center p-3 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition-all select-none group">
-                                    <input type="checkbox" value="{{ $skill->id }}" x-model="$store.jobModal.form.skills"
+                                    <input type="checkbox" value="{{ $skill->id }}"
+                                        x-model="$store.jobModal.form.skills"
                                         class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                                     <span
                                         class="ml-2.5 text-sm text-gray-600 group-hover:text-gray-900">{{ $skill->name }}</span>
@@ -341,7 +344,7 @@
                         this.isEdit = false;
                         // Reset file input manually if needed
                         const fileInput = document.getElementById('image');
-                        if(fileInput) fileInput.value = '';
+                        if (fileInput) fileInput.value = '';
                     },
 
                     openCreate() {
@@ -395,11 +398,12 @@
                                 method: 'POST',
                                 body: formData,
                                 headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                    'X-CSRF-TOKEN': document.querySelector(
+                                        'meta[name="csrf-token"]').getAttribute('content'),
                                     'Accept': 'application/json'
                                 }
                             });
-                            
+
                             if (response.ok) {
                                 // Reload jobs or notify success
                                 const event = new CustomEvent('job-saved');
@@ -418,72 +422,6 @@
                     }
                 });
             });
-
-            function jobManager() {
-                return {
-                    jobs: @json($emplois->items()),
-                    total: {{ $emplois->total() }},
-                    search: '',
-                    skill: '',
-                    
-                    init() {
-                         window.addEventListener('job-saved', () => {
-                            this.fetchJobs();
-                         });
-                    },
-
-                    fetchJobs() {
-                        const params = new URLSearchParams();
-                        if (this.search) params.append('search', this.search);
-                        if (this.skill) params.append('skill', this.skill);
-
-                        fetch('/api/emplois?' + params.toString())
-                            .then(res => res.json())
-                            .then(data => {
-                                this.jobs = data.emplois;
-                                this.total = data.count || data.emplois.length; 
-                            });
-                    },
-                    
-                    resetFilters() {
-                        this.search = '';
-                        this.skill = '';
-                        this.fetchJobs();
-                    },
-
-                    openCreateModal() {
-                        Alpine.store('jobModal').openCreate();
-                    },
-
-                    openEditModal(job) {
-                        Alpine.store('jobModal').openEdit(job);
-                    },
-
-                    async deleteJob(id) {
-                        if (!confirm('Supprimer cette offre ?')) return;
-                         try {
-                            const response = await fetch(`/emplois/${id}`, {
-                                method: 'DELETE',
-                                headers: {
-                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json'
-                                }
-                            });
-
-                            if (response.ok) {
-                                this.fetchJobs();
-                            } else {
-                                alert('Erreur lors de la suppression');
-                            }
-                        } catch (e) {
-                            console.error(e);
-                            alert('Erreur de connexion');
-                        }
-                    }
-                }
-            }
         </script>
     @endpush
 @endsection
-
