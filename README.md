@@ -25,12 +25,6 @@ paginate: true
 <img src='./images/Waterfall.webp' width='1000'>
 
 
----
-
-# Choix du Sujet
-
-
-- job_skill
 
 ---
 
@@ -96,12 +90,6 @@ paginate: true
 
 --- 
 
-# Sujet - Live coding
-
-- Un bouton « Ajouter » qui ouvre une modale pour créer un nouvel emploi.
-- Une barre de recherche filtrant des Emploi par compétences.
-
----
 
 
 ## Historique des Versions
@@ -122,56 +110,55 @@ paginate: true
 
 ---
 
-## v1 Public Side - Live Coding
+## v1 Public Side 
 
-* Creation du portfolio personnel
+* Live Coding : Creation du portfolio personnel
+
+
+
+
+## v2 Admin Side 
+
+* Live Coding :Gestion des articles (CRUD)
+
+
+
+## v3 Authentification / Authorization 
+
+* Live Coding :
 
 
 ---
 
-## v2 Admin Side - Live Coding
-
-* Gestion des articles (CRUD)
-
----
-
-## v3 Authentification / Authorization - Live Coding
-
-* 
-
-
----
-
-## v4 SPA / AJAX - Live Coding
-
+## v4 SPA / AJAX 
+- Live Coding : 
 * Un bouton "Ajouter" qui ouvre une modale pour créer un nouvel élément
 * Une barre de recherche filtrant des éléments par titre
 
 
----
 
-## v5 SPA / Alpine.js - Live Coding
+## v5 SPA / Alpine.js  
 
-* 
-
-
----
-
-## v6 Spatie / Authorization - Live Coding
-
-* 
+* Live Coding :
 
 
 ---
 
-## v7 API - Live Coding
+## v6 Spatie / Authorization 
 
-* 
+* Live Coding :
 
 
----
 
-## v8 Mobile App - Live Coding
+## v7 API 
 
-* 
+* Live Coding :
+
+
+
+
+## v8 Mobile App 
+
+*  Live Coding
+
 

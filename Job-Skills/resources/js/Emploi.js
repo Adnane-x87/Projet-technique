@@ -391,5 +391,6 @@ document.addEventListener('DOMContentLoaded', function() {
             closeJobModal();
         }
     });
+    
 
 });
