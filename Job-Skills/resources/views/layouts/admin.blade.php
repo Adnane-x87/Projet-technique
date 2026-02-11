@@ -17,6 +17,8 @@
         @yield('content')
     </main>
 
+    @stack('scripts')
+
     <script>
         window.addEventListener('load', () => {
             if (window.lucide && window.lucide.createIcons && window.lucide.icons) {

@@ -17,12 +17,12 @@ class UserSeeder extends Seeder
             $header = fgetcsv($handle); 
             while (($row = fgetcsv($handle)) !== false) {
                 $data = array_combine($header, $row); 
-                User::firstOrCreate(
+                User::updateOrCreate(
                     ['email' => $data['email']],
                     [
                         'name' => $data['name'],
                         'password' => Hash::make($data['password']),
-                        'is_admin' => $data['email'] === 'admin@perfume.com', // Make admin@perfume.com an admin
+                        'is_admin' => (bool)($data['is_admin'] ?? false),
                     ]
                 );
             }
