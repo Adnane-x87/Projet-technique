@@ -80,7 +80,7 @@ export default (initialJobsData, initialTotal) => ({
                 page: this.page // Send current page to server
             });
 
-            const response = await fetch(`/api/search-emplois?${params.toString()}`);
+            const response = await fetch(`/api/emplois?${params.toString()}`);
             const data = await response.json();
 
             // Handle response from EmploiController::search
