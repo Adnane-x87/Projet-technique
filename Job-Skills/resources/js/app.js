@@ -2,8 +2,7 @@ import "./bootstrap";
 import Alpine from 'alpinejs';
 
 // Import Alpine components
-import emploiManager from './components/emploiManager.js';
-import emploiFilter from './components/emploiFilter.js';
+import emploiManager, { emploiFilter } from './components/emploiManager.js';
 
 // Register components globally
 window.emploiManager = emploiManager;

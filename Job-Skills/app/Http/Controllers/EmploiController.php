@@ -128,13 +128,17 @@ class EmploiController extends Controller
     {
         $emplois = $this->emploiService->searchAndFilter(
             $request->get('search'),
-            $request->get('skill')
+            $request->get('skill'),
+            $request->get('perPage', 5)
         );
 
         $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
 
         return response()->json([
-            'count' => $formattedJobs->count(),
+            'count' => $emplois->total(),
+            'current_page' => $emplois->currentPage(),
+            'last_page' => $emplois->lastPage(),
+            'per_page' => $emplois->perPage(),
             'emplois' => $formattedJobs
         ]);
     }

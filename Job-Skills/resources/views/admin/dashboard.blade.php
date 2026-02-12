@@ -1,7 +1,8 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div x-data='emploiManager(@json($initialJobs), {{ $emplois->total() }})' x-init="init()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div x-data='emploiManager(@json($initialJobs), {{ $emplois->total() }}, {{ $emplois->currentPage() }}, {{ $emplois->lastPage() }})'
+        x-init="init()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
@@ -194,8 +195,35 @@
                 </table>
             </div>
 
-            <!-- Pagination Container -->
-            <!-- Simplified pagination for Alpine example - relying on load more or full list, but keeping it simple for now or implementing basic prev/next if API supports it -->
+            <!-- Pagination Container (style similaire au public) -->
+            <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between">
+                <p class="text-sm text-gray-600">
+                    <span x-text="'Affichage page ' + currentPage + ' sur ' + Math.max(lastPage, 1)"></span>
+                </p>
+                <nav class="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <button type="button" @click="prevPage"
+                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                        :disabled="currentPage <= 1">
+                        ‹
+                    </button>
+
+                    <template x-for="page in lastPage" :key="page">
+                        <button type="button" @click="goToPage(page)"
+                            class="relative inline-flex items-center px-3 py-2 text-sm font-medium border border-gray-300"
+                            :class="page === currentPage
+                                ? 'z-10 bg-blue-600 text-white border-blue-600'
+                                : 'bg-white text-gray-700 hover:bg-gray-50'">
+                            <span x-text="page"></span>
+                        </button>
+                    </template>
+
+                    <button type="button" @click="nextPage"
+                        class="relative inline-flex items-center px-2 py-2 text-sm font-medium rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                        :disabled="currentPage >= lastPage">
+                        ›
+                    </button>
+                </nav>
+            </div>
         </div>
     </div>
 
