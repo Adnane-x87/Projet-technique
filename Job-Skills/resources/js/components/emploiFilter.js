@@ -1,7 +1,4 @@
-/**
- * Alpine.js component for filtering jobs on the public index page
- * Converted from vanilla JavaScript to Alpine.js
- */
+
 export default () => ({
     search: new URLSearchParams(window.location.search).get('search') || '',
     skill: new URLSearchParams(window.location.search).get('skill') || '',

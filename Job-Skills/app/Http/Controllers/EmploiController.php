@@ -54,19 +54,10 @@ class EmploiController extends Controller
         $skills = $this->skillsService->getAllSkills();
         $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
         
-        // Prepare pagination data
-        $formattedJobsArray = $formattedJobs->toArray();
-        $paginationData = [
-            'data' => $formattedJobsArray,
-            'current_page' => $emplois->currentPage(),
-            'last_page' => $emplois->lastPage(),
-            'total' => $emplois->total(),
-        ];
-        
         return view('admin.dashboard', [
             'emplois' => $emplois, 
             'skills' => $skills,
-            'initialJobs' => $paginationData
+            'initialJobs' => $formattedJobs->toArray()
         ]);
     }
 
@@ -137,17 +128,14 @@ class EmploiController extends Controller
     {
         $emplois = $this->emploiService->searchAndFilter(
             $request->get('search'),
-            $request->get('skill'),
-            5 // Ensure pagination in search too
+            $request->get('skill')
         );
 
         $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
 
         return response()->json([
-            'data' => $formattedJobs,
-            'current_page' => $emplois->currentPage(),
-            'last_page' => $emplois->lastPage(),
-            'total' => $emplois->total(),
+            'count' => $formattedJobs->count(),
+            'emplois' => $formattedJobs
         ]);
     }
 }

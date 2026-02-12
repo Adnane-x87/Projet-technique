@@ -2,8 +2,6 @@
 
 @section('content')
     <div x-data='emploiManager(@json($initialJobs), {{ $emplois->total() }})' x-init="init()" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <!-- DEBUG: Show jobs array and type -->
-        <!-- Debug box removed for production -->
         <!-- Header -->
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
@@ -105,6 +103,7 @@
                                 Actions</th>
                         </tr>
                     </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
                         <template x-for="job in jobs" :key="job.id">
                             <tr class="hover:bg-gray-50 transition-colors">
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -146,7 +145,8 @@
 
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                     <div class="flex justify-end gap-1">
-                                        <!-- ...existing code... -->
+                                        {{-- @can('update-job', $emploi) --}}
+                                        <!-- Since we are in Alpine context, we handle permissions via backend validation or passing auth user data. For simplicity here, assuming admin sees buttons but actions are protected. Ideally pass permission flags in JSON. -->
                                         <button @click="openEditModal(job)" class="p-2 text-blue-600 rounded-lg"
                                             title="Modifier">
                                             <svg class="h-4 w-4" fill="none" stroke="currentColor"
@@ -155,6 +155,9 @@
                                                     d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </button>
+                                        {{-- @endcan --}}
+
+                                        {{-- @can('delete-job', $emploi) --}}
                                         <button @click="deleteJob(job.id)" class="p-2 text-red-600 rounded-lg"
                                             title="Supprimer">
                                             <svg class="h-4 w-4" fill="none" stroke="currentColor"
@@ -163,11 +166,12 @@
                                                     d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                         </button>
+                                        {{-- @endcan --}}
                                     </div>
                                 </td>
                             </tr>
                         </template>
-                        <template x-if="jobs.length === 0 && !loading">
+                        <template x-if="jobs.length === 0">
                             <tr>
                                 <td colspan="4" class="px-6 py-12 text-center text-gray-500">
                                     <div class="flex flex-col items-center">
@@ -186,39 +190,7 @@
                                 </td>
                             </tr>
                         </template>
-                         <template x-if="loading">
-                            <tr>
-                                <td colspan="4" class="px-6 py-12 text-center text-gray-500">
-                                    Chargement...
-                                </td>
-                            </tr>
-                        </template>
                     </tbody>
-                </table>
-            </div>
-
-            <!-- Pagination Controls -->
-            <div class="flex justify-center items-center gap-2 py-4 border-t border-gray-100" x-show="totalPages > 1">
-                <button @click="prevPage" :disabled="page === 1"
-                    class="px-3 py-1 rounded bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors">
-                    Précédent
-                </button>
-                
-                <div class="flex items-center gap-1">
-                    <template x-for="n in pageNumbers" :key="n">
-                        <button @click="setPage(n)" 
-                            :class="{'bg-blue-600 text-white border-blue-600': page === n, 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50': page !== n}"
-                            class="w-8 h-8 flex items-center justify-center rounded border text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                            <span x-text="n"></span>
-                        </button>
-                    </template>
-                </div>
-
-                <button @click="nextPage" :disabled="page === totalPages"
-                    class="px-3 py-1 rounded bg-white border border-gray-200 text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-medium transition-colors">
-                    Suivant
-                </button>
-            </div>
                 </table>
             </div>
 
