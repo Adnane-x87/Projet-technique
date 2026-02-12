@@ -1,7 +1,6 @@
 
 import { baseLogic } from './baseComponent.js';
 
-// Service dédié aux emplois, adapté à ton backend (pour le dashboard admin)
 const emploiService = {
     async getAll(params) {
         return axios.get('/api/emplois', {
