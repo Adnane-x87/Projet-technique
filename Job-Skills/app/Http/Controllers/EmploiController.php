@@ -29,12 +29,17 @@ class EmploiController extends Controller
             5
         );
         $skills = $this->skillsService->getAllSkills();
+        $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
         
         if ($request->ajax()) {
-            return view('emplois._job_card', compact('emplois'))->render();
+            return view('emplois._job_card', ['emplois' => $emplois])->render();
         }
 
-        return view('emplois.index', compact('emplois', 'skills'));
+        return view('emplois.index', [
+            'emplois' => $emplois,
+            'skills' => $skills,
+            'initialJobs' => $formattedJobs
+        ]);
     }
 
     public function manage(Request $request)
@@ -47,8 +52,13 @@ class EmploiController extends Controller
             5
         );
         $skills = $this->skillsService->getAllSkills();
+        $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
         
-        return view('admin.dashboard', compact('emplois', 'skills'));
+        return view('admin.dashboard', [
+            'emplois' => $emplois, 
+            'skills' => $skills,
+            'initialJobs' => $formattedJobs->toArray()
+        ]);
     }
 
     public function create()
@@ -118,13 +128,17 @@ class EmploiController extends Controller
     {
         $emplois = $this->emploiService->searchAndFilter(
             $request->get('search'),
-            $request->get('skill')
+            $request->get('skill'),
+            $request->get('perPage', 5)
         );
 
         $formattedJobs = $this->emploiService->formatJobsForApi($emplois);
 
         return response()->json([
-            'count' => $formattedJobs->count(),
+            'count' => $emplois->total(),
+            'current_page' => $emplois->currentPage(),
+            'last_page' => $emplois->lastPage(),
+            'per_page' => $emplois->perPage(),
             'emplois' => $formattedJobs
         ]);
     }

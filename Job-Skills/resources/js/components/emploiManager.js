@@ -1,36 +1,145 @@
-/**
- * Alpine.js component for managing jobs in the admin dashboard
- * Handles search, filter, and CRUD operations
- */
-export default (initialJobs, initialTotal) => ({
-    jobs: initialJobs,
-    total: initialTotal,
-    search: '',
-    skill: '',
 
-    init() {
-        window.addEventListener('job-saved', () => {
-            this.fetchJobs();
+import { baseLogic } from './baseComponent.js';
+
+// Service dédié aux emplois, adapté à ton backend (pour le dashboard admin)
+const emploiService = {
+    async getAll(params) {
+        return axios.get('/api/emplois', {
+            params,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         });
     },
 
-    fetchJobs() {
-        const params = new URLSearchParams();
-        if (this.search) params.append('search', this.search);
-        if (this.skill) params.append('skill', this.skill);
+    async delete(id) {
+        return axios.delete(`/emplois/${id}`, {
+            headers: {
+                'X-CSRF-TOKEN': document
+                    .querySelector('meta[name="csrf-token"]')
+                    .getAttribute('content'),
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+    }
+};
 
-        fetch('/api/emplois?' + params.toString())
-            .then(res => res.json())
-            .then(data => {
-                this.jobs = data.emplois;
-                this.total = data.count || data.emplois.length;
-            });
+// Composant Alpine pour la partie publique (liste + filtre emplois)
+export const emploiFilter = () => ({
+    ...baseLogic({}),
+
+    search: new URLSearchParams(window.location.search).get('search') || '',
+    skill: new URLSearchParams(window.location.search).get('skill') || '',
+
+    init() {
+        // Composant initialisé
+    },
+
+    fetchJobs() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('page', 1);
+
+        if (this.search) {
+            url.searchParams.set('search', this.search);
+        } else {
+            url.searchParams.delete('search');
+        }
+
+        if (this.skill) {
+            url.searchParams.set('skill', this.skill);
+        } else {
+            url.searchParams.delete('skill');
+        }
+
+        window.history.pushState({}, '', url);
+
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+            .then(res => res.text())
+            .then(html => {
+                const jobsGrid = document.getElementById('jobs-grid');
+                if (jobsGrid) {
+                    jobsGrid.innerHTML = html;
+                }
+                this.reinitUI();
+            })
+            .catch(err => console.error(err));
     },
 
     resetFilters() {
         this.search = '';
         this.skill = '';
         this.fetchJobs();
+    }
+});
+
+// Composant Alpine pour le tableau de bord admin
+export default (initialJobs, initialTotal, initialPage = 1, initialLastPage = 1) => ({
+    // Logique commune (loading, error, reinitUI, performFetch)
+    ...baseLogic(emploiService),
+
+    // État spécifique à ton dashboard
+    jobs: initialJobs,
+    total: initialTotal,
+    search: '',
+    skill: '',
+    currentPage: initialPage,
+    lastPage: initialLastPage,
+    perPage: 5,
+
+    init() {
+        // Réagir automatiquement aux changements de filtres
+        this.$watch('search', () => this.fetchJobs(1));
+        this.$watch('skill', () => this.fetchJobs(1));
+
+        // Quand une offre est créée / éditée via la modale
+        window.addEventListener('job-saved', () => {
+            this.fetchJobs();
+        });
+
+        this.reinitUI();
+    },
+
+    async fetchJobs(page = 1) {
+        await this.performFetch(
+            () =>
+                this.service.getAll({
+                    search: this.search || '',
+                    skill: this.skill || '',
+                    page,
+                    perPage: this.perPage
+                }),
+            (res) => {
+                this.jobs = res.data.emplois;
+                this.total = res.data.count ?? res.data.emplois.length;
+                this.currentPage = res.data.current_page ?? this.currentPage;
+                this.lastPage = res.data.last_page ?? this.lastPage;
+                this.reinitUI();
+            }
+        );
+    },
+
+    resetFilters() {
+        this.search = '';
+        this.skill = '';
+        this.fetchJobs(1);
+    },
+
+    goToPage(page) {
+        if (page < 1 || page > this.lastPage) return;
+        this.fetchJobs(page);
+    },
+
+    nextPage() {
+        if (this.currentPage < this.lastPage) {
+            this.fetchJobs(this.currentPage + 1);
+        }
+    },
+
+    prevPage() {
+        if (this.currentPage > 1) {
+            this.fetchJobs(this.currentPage - 1);
+        }
     },
 
     openCreateModal() {
@@ -43,24 +152,13 @@ export default (initialJobs, initialTotal) => ({
 
     async deleteJob(id) {
         if (!confirm('Supprimer cette offre ?')) return;
-        try {
-            const response = await fetch(`/emplois/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            });
 
-            if (response.ok) {
+        await this.performFetch(
+            () => this.service.delete(id),
+            () => {
                 this.fetchJobs();
-            } else {
-                alert('Erreur lors de la suppression');
             }
-        } catch (e) {
-            console.error(e);
-            alert('Erreur de connexion');
-        }
+        );
     }
 });
+
