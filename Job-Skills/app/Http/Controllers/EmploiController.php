@@ -70,12 +70,11 @@ class EmploiController extends Controller
 
     public function store(StoreEmploiRequest $request)
     {
-        // Validation and Authorization handled by StoreEmploiRequest
 
         $validated = $request->validated();
 
         $emploi = $this->emploiService->createJob(
-            $validated + ['user_id' => auth()->id()], // Ensure user_id is passed
+            $validated + ['user_id' => auth()->id()], 
             $request->file('image')
         );
 
@@ -100,7 +99,6 @@ class EmploiController extends Controller
 
     public function update(UpdateEmploiRequest $request, Emploi $emploi)
     {
-        // Validation and Authorization handled by UpdateEmploiRequest
 
         $validated = $request->validated();
 
@@ -121,6 +119,11 @@ class EmploiController extends Controller
     {
         Gate::authorize('delete-job', $emploi);
         $this->emploiService->deleteJob($emploi->id);
+
+        if (request()->wantsJson()) {
+            return response()->json(['message' => 'Job deleted successfully.']);
+        }
+
         return redirect()->route('admin.dashboard')->with('success', 'Job deleted successfully.');
     }
 

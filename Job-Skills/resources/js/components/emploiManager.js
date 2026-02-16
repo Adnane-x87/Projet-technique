@@ -155,7 +155,16 @@ export default (initialJobs, initialTotal, initialPage = 1, initialLastPage = 1)
         await this.performFetch(
             () => this.service.delete(id),
             () => {
-                this.fetchJobs();
+                // Remove the job from the local list
+                this.jobs = this.jobs.filter(job => job.id !== id);
+                this.total--;
+
+                // If the current page becomes empty and we're not on the first page, go to previous page
+                if (this.jobs.length === 0 && this.currentPage > 1) {
+                    this.prevPage();
+                } else if (this.jobs.length === 0 && this.currentPage === 1) {
+                     // If we are on page 1 and it's empty, we might want to stay here or show empty state (already handled by template)
+                }
             }
         );
     }
