@@ -4,11 +4,13 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use App\Services\SkillsService;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class SkillsServiceTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
+
+    protected bool $seed = true;
 
     protected SkillsService $service;
 

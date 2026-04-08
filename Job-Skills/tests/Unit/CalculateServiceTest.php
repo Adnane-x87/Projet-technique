@@ -7,7 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class CalculateServiceTest extends TestCase
 {
-    public function test_sum_of_two_numbers()
+        public function test_sum_of_two_numbers()
     {
         
         $service = new CalculateService();

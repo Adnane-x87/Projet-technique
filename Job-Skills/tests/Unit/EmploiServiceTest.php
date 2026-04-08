@@ -7,11 +7,13 @@ use App\Models\Emploi;
 use App\Models\Skills;
 use App\Models\User;
 use App\Services\EmploiService;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class EmploiServiceTest extends TestCase
 {
-    use DatabaseTransactions;
+    use RefreshDatabase;
+
+    protected bool $seed = true;
 
     protected EmploiService $service;
 
@@ -32,7 +34,7 @@ class EmploiServiceTest extends TestCase
     {
         $job = Emploi::first();
 
-        $result = $this->service->getJobId($job->id);
+        $result = $this->service->getJobById($job->id);
 
         $this->assertEquals($job->id, $result->id);
         $this->assertEquals($job->title, $result->title);
@@ -43,7 +45,7 @@ class EmploiServiceTest extends TestCase
         $job = Emploi::first();
         $searchTerm = substr($job->title, 0, 5);
 
-        $result = $this->service->searchJobs($searchTerm);
+        $result = $this->service->searchAndFilter($searchTerm);
 
         $this->assertGreaterThan(0, $result->count());
 
@@ -55,7 +57,7 @@ class EmploiServiceTest extends TestCase
     {
         $skill = Skills::whereHas('emplois')->first();
 
-        $result = $this->service->filterBySkill($skill->id);
+        $result = $this->service->searchAndFilter(null, $skill->id);
 
         $this->assertGreaterThan(0, $result->count());
 

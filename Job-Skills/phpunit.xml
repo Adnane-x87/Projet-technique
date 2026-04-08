@@ -31,5 +31,8 @@
         <env name="PULSE_ENABLED" value="false"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="NIGHTWATCH_ENABLED" value="false"/>
+        <env name="APP_ENV" value="testing"/>
+        <env name="DB_DATABASE" value="my_project_test"/>
+        <env name="DB_CONNECTION" value="mysql"/>
     </php>
 </phpunit>
